@@ -3,9 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 /**
  * Reusable React hook for API requests
  * @param {Function} apiFunc - Async function to call
- * @param {Array} dependencies - Dependency array to trigger refetch
  */
-export function useApi(apiFunc, dependencies = []) {
+export function useApi(apiFunc) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,12 +20,27 @@ export function useApi(apiFunc, dependencies = []) {
     } finally {
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, dependencies);
+  }, [apiFunc]);
 
   useEffect(() => {
-    execute();
-  }, [execute]);
+    let isMounted = true;
+    const run = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const result = await apiFunc();
+        if (isMounted) setData(result);
+      } catch (err) {
+        if (isMounted) setError(err.message || 'An unexpected error occurred.');
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+    run();
+    return () => {
+      isMounted = false;
+    };
+  }, [apiFunc]);
 
   return { data, loading, error, refetch: execute };
 }
