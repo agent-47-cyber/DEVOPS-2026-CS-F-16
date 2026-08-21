@@ -1,26 +1,7 @@
 import { Link } from 'react-router-dom';
-import Reveal from '../components/Reveal.jsx';
 
 function NotFound() {
-  return (
-    <div className="flex min-h-[50vh] items-center justify-center text-center">
-      <Reveal className="space-y-4">
-        <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Error 404</span>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">Route Not Found</h1>
-        <p className="text-sm text-neutral-400 max-w-sm mx-auto">
-          The requested page does not exist or has been relocated within the application routing graph.
-        </p>
-        <div className="pt-2">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-lg bg-neutral-100 px-4 py-2.5 text-xs font-semibold text-neutral-900 transition-colors hover:bg-neutral-300"
-          >
-            Return to Home &rarr;
-          </Link>
-        </div>
-      </Reveal>
-    </div>
-  );
+  return <div className="flex min-h-[80vh] items-center px-5 pt-20 md:px-10"><div><p className="font-mono text-[10px] uppercase tracking-[.22em] text-[#9df4e6]">404 — Lost route</p><h1 className="mt-5 text-[clamp(4rem,13vw,12rem)] font-bold leading-[.72] tracking-[-.12em]">Not<br /><span className="editorial-italic text-[#9df4e6]">here.</span></h1><Link to="/" className="mt-12 inline-block border-b border-white pb-2 text-sm font-semibold hover:text-[#9df4e6] hover:border-[#9df4e6]">Return home ↗</Link></div></div>;
 }
 
 export default NotFound;

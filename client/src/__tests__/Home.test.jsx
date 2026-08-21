@@ -16,35 +16,32 @@ jest.mock('../api/index.js', () => ({
 }));
 
 describe('Home Page Component', () => {
-  test('renders hero headline and professional description', async () => {
+  test('renders the editorial hero and selected work', async () => {
     render(
       <BrowserRouter>
         <Home />
       </BrowserRouter>
     );
 
-    // Verify main headline and introduction
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-    expect(
-      screen.getByText(/Building robust web applications and automated delivery pipelines/i)
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /say hello to your creative developer/i })).toBeInTheDocument();
+    expect(screen.getByText(/Have a look/i)).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText(/Mocked Cloud Project/i)).toBeInTheDocument();
     });
   });
 
-  test('renders navigation CTA links correctly', async () => {
+  test('renders work and contact destinations correctly', async () => {
     render(
       <BrowserRouter>
         <Home />
       </BrowserRouter>
     );
 
-    const projectsLink = screen.getByRole('link', { name: /Explore Projects/i });
+    const projectsLink = screen.getByRole('link', { name: /All work/i });
     expect(projectsLink).toHaveAttribute('href', '/projects');
 
-    const contactLink = screen.getByRole('link', { name: /Get in Touch/i });
+    const contactLink = screen.getByRole('link', { name: /Start a conversation/i });
     expect(contactLink).toHaveAttribute('href', '/contact');
 
     await waitFor(() => {

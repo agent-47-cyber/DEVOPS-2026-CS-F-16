@@ -1,16 +1,16 @@
+import { Link } from 'react-router-dom';
+
 function Footer() {
   return (
-    <footer className="mt-auto border-t border-neutral-800/80 bg-neutral-950 py-10 text-xs text-neutral-500">
-      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-        <div>
-          <p className="text-neutral-400 font-medium">Yatin Khandelwal &copy; {new Date().getFullYear()}</p>
-          <p className="text-neutral-600 text-[11px] mt-0.5">B.Tech Fullstack & DevOps Capstone Project</p>
-        </div>
-        <div className="flex items-center space-x-4 text-neutral-400">
-          <span className="inline-flex items-center gap-1.5 text-[11px]">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse-dot"></span>
-            All systems operational
-          </span>
+    <footer className="bg-[#080808] px-5 pb-6 pt-4 text-white md:px-10">
+      <div className="mx-auto max-w-[1600px] border-t border-white/25 pt-4">
+        <div className="flex flex-col justify-between gap-4 text-[11px] sm:flex-row sm:items-center">
+          <p className="font-mono uppercase tracking-[.14em] text-white/45">© {new Date().getFullYear()} Yatin Khandelwal</p>
+          <div className="flex gap-5 text-white/60">
+            <Link to="/projects" className="hover:text-[#9df4e6]">Work</Link>
+            <Link to="/contact" className="hover:text-[#9df4e6]">Contact</Link>
+            <Link to="/admin/login" className="hover:text-[#9df4e6]">Admin</Link>
+          </div>
         </div>
       </div>
     </footer>
