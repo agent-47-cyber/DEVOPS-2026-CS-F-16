@@ -85,3 +85,59 @@ cd client
 npm install
 npm run dev   # Starts client at http://localhost:5173
 ```
+
+---
+
+## Running with Docker
+
+### Prerequisites
+- [Docker Engine](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### 1. Build and Start All Containers
+```bash
+docker compose up --build
+```
+This single command spins up the complete 3-tier containerized stack:
+- **`portfolio-client`**: Multi-stage React/Vite SPA served by Nginx Alpine on [http://localhost:5173](http://localhost:5173)
+- **`portfolio-server`**: Node.js Alpine Express REST API on [http://localhost:5000](http://localhost:5000)
+- **`portfolio-mongo`**: MongoDB 7.0 database container on `localhost:27017` with persistent named volume `portfolio-mongo-data`
+
+### 2. Seed Database Inside Docker
+```bash
+docker compose exec server npm run seed
+```
+
+### 3. Check Container Status and Logs
+```bash
+# View running services
+docker compose ps
+
+# View real-time logs
+docker compose logs -f
+
+# View service-specific logs
+docker compose logs server
+docker compose logs client
+docker compose logs mongo
+```
+
+### 4. Stop Containers
+```bash
+# Stop containers (preserves database volume)
+docker compose down
+
+# Stop containers and remove volumes (clean wipe)
+docker compose down -v
+```
+
+---
+
+### Docker Networking Architecture & Notes
+- **Browser &rarr; Client Container**: Fetches the production static SPA bundle via Nginx on port `5173`.
+- **Browser &rarr; Server Container**: Client-side JavaScript makes REST API requests to `http://localhost:5000/api` on the host machine.
+- **Server Container &rarr; MongoDB Container**: Server communicates with MongoDB internally over the Docker bridge network (`portfolio-network`) using the service hostname:
+  - *Local Host Development*: `mongodb://localhost:27017/portfolio_db`
+  - *Docker Compose*: `mongodb://mongo:27017/portfolio_db`
+- **Data Persistence**: MongoDB stores data in the named volume `portfolio-mongo-data`, ensuring records survive container restarts and updates.
+
