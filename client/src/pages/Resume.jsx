@@ -1,73 +1,19 @@
 import Reveal from '../components/Reveal.jsx';
 
+const strengths = [
+  ['Frontend', 'React, Redux Toolkit, React Router, Vite, Tailwind CSS'],
+  ['Backend', 'Node.js, Express, REST APIs, JWT security'],
+  ['Data', 'MongoDB, Mongoose, schema design'],
+  ['DevOps', 'Docker, Compose, Kubernetes, Jenkins CI/CD, Prometheus'],
+  ['Quality', 'Jest, Supertest, React Testing Library, ESLint'],
+];
+
 function Resume() {
-  return (
-    <div className="space-y-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-neutral-800 pb-8">
-        <div className="space-y-3">
-          <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Curriculum Vitae</span>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">Engineering Resume</h1>
-          <p className="text-neutral-400 max-w-xl text-base leading-relaxed">
-            Summary of qualifications, academic background, and technical skillset.
-          </p>
-        </div>
-
-        {/* Resume Download Action */}
-        <div>
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-neutral-950 shadow-sm transition-all duration-200 hover:bg-neutral-200 hover:shadow"
-          >
-            <span>Download PDF</span>
-            <span className="font-mono text-xs">&darr;</span>
-          </a>
-        </div>
-      </div>
-
-      {/* Resume Highlights Grid */}
-      <div className="space-y-8">
-        <Reveal>
-          <div className="rounded-xl border border-neutral-800/80 bg-neutral-900/30 p-6 sm:p-8 space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-white mb-2">Executive Summary</h2>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Computer Science graduate (B.Tech RTU) with a strong foundation in modern fullstack JavaScript ecosystems (React, Node.js, Express, MongoDB) and cloud DevOps engineering (Docker containerization, Kubernetes cluster management, Jenkins CI/CD pipelines, and Prometheus monitoring).
-              </p>
-            </div>
-
-            <div className="border-t border-neutral-800/80 pt-6">
-              <h2 className="text-lg font-bold text-white mb-4">Core Competencies</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                <div className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/60">
-                  <span className="font-mono text-neutral-500 uppercase block mb-1">Web Development</span>
-                  <p className="text-neutral-300 font-medium">React, JavaScript (ES6+), Tailwind CSS, HTML5/CSS3, React Router</p>
-                </div>
-                <div className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/60">
-                  <span className="font-mono text-neutral-500 uppercase block mb-1">Backend & DB</span>
-                  <p className="text-neutral-300 font-medium">Node.js, Express.js, MongoDB, Mongoose, REST APIs, JWT Auth</p>
-                </div>
-                <div className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/60">
-                  <span className="font-mono text-neutral-500 uppercase block mb-1">DevOps & Cloud</span>
-                  <p className="text-neutral-300 font-medium">Docker, Kubernetes, Jenkins CI/CD, Git, Prometheus, Grafana</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-neutral-800/80 pt-6">
-              <h2 className="text-lg font-bold text-white mb-2">Education</h2>
-              <div>
-                <p className="text-sm font-semibold text-neutral-200">Bachelor of Technology (B.Tech) in Computer Science</p>
-                <p className="text-xs text-neutral-400 font-mono">Rajasthan Technical University (RTU) &bull; 2022 — 2026</p>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </div>
-    </div>
-  );
+  return <div className="min-h-screen pt-32"><section className="px-5 pb-24 md:px-10"><div className="mx-auto max-w-[1200px]">
+    <Reveal><p className="font-mono text-[10px] uppercase tracking-[.22em] text-[#9df4e6]">Yatin Khandelwal — Resume</p><div className="mt-6 flex flex-col justify-between gap-8 border-b border-white/20 pb-12 md:flex-row md:items-end"><h1 className="text-[clamp(4rem,11vw,10rem)] font-bold leading-[.75] tracking-[-.1em]">Fullstack<br /><span className="editorial-italic text-[#9df4e6]">builder.</span></h1><a href="/assets/resume.pdf" target="_blank" rel="noopener noreferrer" className="w-fit border-b border-white pb-2 text-sm font-semibold hover:text-[#9df4e6] hover:border-[#9df4e6]">Download PDF ↓</a></div></Reveal>
+    <Reveal className="mt-16 grid gap-12 md:grid-cols-[.75fr_1.25fr]"><div><p className="font-mono text-[10px] uppercase tracking-[.2em] text-white/45">Profile</p><p className="mt-4 text-xl leading-relaxed text-white/80">Fullstack engineer and DevOps-focused computer science student, interested in dependable software and the systems that deliver it.</p></div><div><p className="font-mono text-[10px] uppercase tracking-[.2em] text-white/45">Capabilities</p><dl className="mt-4">{strengths.map(([label, detail]) => <div key={label} className="grid gap-2 border-t border-white/15 py-4 sm:grid-cols-[150px_1fr]"><dt className="font-mono text-xs text-[#9df4e6]">{label}</dt><dd className="text-sm leading-relaxed text-white/65">{detail}</dd></div>)}</dl></div></Reveal>
+    <Reveal className="mt-16 border-t border-white/20 pt-6"><p className="font-mono text-[10px] uppercase tracking-[.2em] text-white/45">Education</p><h2 className="mt-4 text-3xl font-bold tracking-[-.06em]">B.Tech in Computer Science</h2><p className="mt-2 text-sm text-white/55">Rajasthan Technical University (RTU) · 2022 — 2026</p></Reveal>
+  </div></section></div>;
 }
 
 export default Resume;

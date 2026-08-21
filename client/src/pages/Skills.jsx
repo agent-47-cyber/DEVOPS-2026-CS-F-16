@@ -1,107 +1,11 @@
-import { useMemo } from 'react';
 import Reveal from '../components/Reveal.jsx';
 import { getSkills } from '../api/index.js';
 import { useApi } from '../hooks/useApi.js';
 
 function Skills() {
-  const { data: skills, loading, error, refetch } = useApi(getSkills, []);
-
-  // Group fetched skills dynamically by category
-  const categorizedSkills = useMemo(() => {
-    if (!skills || !Array.isArray(skills)) return {};
-    return skills.reduce((acc, skill) => {
-      const cat = skill.category || 'General';
-      if (!acc[cat]) acc[cat] = [];
-      acc[cat].push(skill);
-      return acc;
-    }, {});
-  }, [skills]);
-
-  const categories = Object.keys(categorizedSkills);
-
-  return (
-    <div className="space-y-12">
-      {/* Header */}
-      <div className="space-y-3">
-        <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Technical Expertise</span>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">Skills & Competencies</h1>
-        <p className="text-neutral-400 max-w-2xl text-base leading-relaxed">
-          Comprehensive inventory of fullstack web development and DevOps automation technologies loaded from MongoDB via Express.
-        </p>
-      </div>
-
-      {/* Loading Skeleton */}
-      {loading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="animate-pulse rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-6 h-60 space-y-4">
-              <div className="h-6 w-48 bg-neutral-800 rounded" />
-              <div className="h-4 w-32 bg-neutral-800/60 rounded" />
-              <div className="flex flex-wrap gap-2 pt-4">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="h-8 w-24 bg-neutral-800 rounded-lg" />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Error state */}
-      {error && (
-        <div className="rounded-xl border border-red-900/50 bg-red-950/20 p-8 text-center space-y-3">
-          <p className="text-sm text-red-400 font-mono">Failed to fetch skills: {error}</p>
-          <button
-            onClick={refetch}
-            className="rounded-md border border-red-800 bg-red-900/40 px-4 py-1.5 text-xs text-red-200 hover:bg-red-900/60 transition-colors"
-          >
-            Retry Fetching Skills
-          </button>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!loading && !error && categories.length === 0 && (
-        <div className="rounded-xl border border-neutral-800/80 bg-neutral-900/20 p-12 text-center text-sm text-neutral-500">
-          No skills records found in the database.
-        </div>
-      )}
-
-      {/* Grid of Categorized Skill Cards */}
-      {!loading && !error && categories.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {categories.map((categoryName, idx) => (
-            <Reveal key={categoryName} delay={idx * 80}>
-              <div className="h-full rounded-xl border border-neutral-800/80 bg-neutral-900/30 p-6 transition-all duration-300 hover:border-neutral-700 hover:bg-neutral-900/60">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-white">{categoryName}</h2>
-                  <span className="text-[11px] font-mono text-neutral-500">
-                    {categorizedSkills[categoryName].length} skills
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {categorizedSkills[categoryName].map((skill) => (
-                    <div
-                      key={skill._id || skill.name}
-                      className="flex items-center justify-between gap-2.5 rounded-lg border border-neutral-800/80 bg-neutral-950/60 px-3 py-1.5 text-xs transition-colors hover:border-neutral-700"
-                    >
-                      <span className="font-medium text-neutral-200">{skill.name}</span>
-                      {skill.level && (
-                        <span className="text-[10px] font-mono text-neutral-500">
-                          {skill.level}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const { data: skills, loading, error } = useApi(getSkills, []);
+  const groups = (skills || []).reduce((all, skill) => ({ ...all, [skill.category || 'Other']: [...(all[skill.category || 'Other'] || []), skill] }), {});
+  return <div className="min-h-screen pt-32"><section className="px-5 pb-24 md:px-10"><div className="mx-auto max-w-[1200px]"><Reveal><p className="font-mono text-[10px] uppercase tracking-[.22em] text-[#9df4e6]">Technical practice</p><h1 className="mt-5 text-[clamp(3.5rem,10vw,9rem)] font-bold leading-[.78] tracking-[-.1em]">Tools are only as good as the <span className="editorial-italic text-[#9df4e6]">thinking</span> behind them.</h1></Reveal>{loading && <div className="mt-16 h-48 animate-pulse border-t border-white/20" />}{error && <p className="mt-16 font-mono text-sm text-red-300">Unable to load skills.</p>}<div className="mt-16">{Object.entries(groups).map(([category, list]) => <Reveal key={category}><section className="grid gap-5 border-t border-white/20 py-6 md:grid-cols-[.65fr_1.35fr]"><h2 className="font-mono text-[10px] uppercase tracking-[.18em] text-[#9df4e6]">{category}</h2><div className="flex flex-wrap gap-x-5 gap-y-3">{list.map((skill) => <span key={skill._id || skill.name} className="text-base text-white/75">{skill.name}<sup className="ml-1 font-mono text-[8px] text-white/35">{skill.level}</sup></span>)}</div></section></Reveal>)}</div></div></section></div>;
 }
 
 export default Skills;
