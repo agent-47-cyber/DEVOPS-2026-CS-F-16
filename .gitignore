@@ -29,3 +29,10 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Private local reference documents (kept locally, not tracked)
+01_AGENT_RULES.md
+02_TECH_STACK_AND_SCOPE.md
+03_DEVOPS_PIPELINE_CONSTRAINTS.md
+*_RULES.md
+*_CONSTRAINTS.md
