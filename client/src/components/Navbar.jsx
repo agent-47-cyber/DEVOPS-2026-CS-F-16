@@ -11,20 +11,31 @@ function Navbar() {
   ];
 
   return (
-    <header className="border-b border-neutral-800 bg-neutral-950/80 sticky top-0 z-50 backdrop-blur">
-      <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        <NavLink to="/" className="font-semibold tracking-tight text-white hover:text-neutral-200">
-          Portfolio
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-800/80 bg-neutral-950/75 backdrop-blur-md transition-all duration-200">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+        {/* Brand / Monogram */}
+        <NavLink
+          to="/"
+          className="group flex items-center space-x-2 text-sm font-semibold tracking-tight text-white transition-opacity hover:opacity-80"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-neutral-800 border border-neutral-700 text-xs font-mono text-neutral-200 group-hover:border-neutral-500 transition-colors">
+            YK
+          </span>
+          <span className="font-medium tracking-tight">Yatin Khandelwal</span>
         </NavLink>
-        <nav className="flex items-center space-x-6 text-sm">
+
+        {/* Public Navigation */}
+        <nav className="flex items-center space-x-1 sm:space-x-2">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                isActive
-                  ? 'text-white font-medium transition-colors'
-                  : 'text-neutral-400 hover:text-neutral-200 transition-colors'
+                `rounded-md px-3 py-1.5 text-xs sm:text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-neutral-800/90 text-white shadow-sm ring-1 ring-neutral-700/50'
+                    : 'text-neutral-400 hover:bg-neutral-900 hover:text-neutral-200'
+                }`
               }
             >
               {item.label}
