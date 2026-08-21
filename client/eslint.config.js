@@ -5,7 +5,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', '.vite/**']
+    ignores: ['dist/**', 'node_modules/**', '.vite/**', 'coverage/**']
   },
   js.configs.recommended,
   {
@@ -24,6 +24,8 @@ export default [
       },
       globals: {
         ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
         ...globals.es2021
       }
     },
@@ -39,7 +41,7 @@ export default [
       'react/prop-types': 'off',
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/use-memo': 'off',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }]
     }
   }
 ];
