@@ -141,4 +141,39 @@ docker compose down -v
   - *Docker Compose*: `mongodb://mongo:27017/portfolio_db`
 - **Data Persistence**: MongoDB stores data in the named volume `portfolio-mongo-data`, ensuring records survive container restarts and updates.
 
+---
+
+## Jenkins CI Pipeline
+
+The project includes a declarative Jenkins Continuous Integration pipeline defined in [`Jenkinsfile`](./Jenkinsfile) at the repository root.
+
+### Pipeline Stages
+
+```text
+Checkout ──▶ Install Dependencies ──▶ Lint (ESLint) ──▶ Build Client ──▶ Server Syntax Check ──▶ Continuous Feedback
+```
+
+1. **Checkout**: Checks out the latest commit from the Git repository.
+2. **Install Dependencies**: Runs deterministic `npm ci` for both `client/` and `server/`.
+3. **Lint**: Executes standard ESLint (`npm run lint`) across both React frontend (`client/src/`) and Express backend (`server/`).
+4. **Build Client**: Generates the production Vite build (`npm run build`) in `client/dist/`.
+5. **Server Syntax Check**: Validates Express server syntax and module imports (`npm run check` &rarr; `node --check server.js`) without hanging or requiring a live database.
+6. **Continuous Feedback**: Reports pipeline status with explicit success/failure post-stage handlers.
+
+### Setting Up the Jenkins Pipeline Job
+
+1. **Prerequisites**:
+   - Jenkins Controller (running locally or on server)
+   - Node.js (v18+) configured on the Jenkins agent
+   - Git plugin installed in Jenkins
+2. **Job Configuration**:
+   - In Jenkins Dashboard, click **New Item** &rarr; Select **Pipeline** &rarr; Enter job name (e.g. `portfolio-ci`).
+   - Under **Pipeline**, select **Definition: Pipeline script from SCM**.
+   - Select **SCM: Git** and provide the repository URL: `https://github.com/agent-47-cyber/collge_portfolio.git`.
+   - Set **Script Path** to `Jenkinsfile`.
+   - Click **Save** and trigger **Build Now**.
+
+> *Note: Automated unit and integration testing (Jest, Supertest, React Testing Library) will be integrated into the Jenkins CI pipeline in Phase 10.*
+
+
 
