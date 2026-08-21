@@ -17,9 +17,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Connect to Database
-await connectDB();
-
 // Root route (basic API status)
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Portfolio API Server Running' });
@@ -37,6 +34,12 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+// Start listener only when not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+}
+
+export default app;
