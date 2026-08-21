@@ -32,13 +32,36 @@ Strictly aligned with the RTU syllabus:
 portfolio-project/
 ├── client/              # React frontend (Vite + Tailwind CSS)
 ├── server/              # Express REST API backend (Node.js + Mongoose)
-│   ├── models/
-│   ├── routes/
-│   ├── controllers/
-│   ├── middleware/
-│   └── config/
+│   ├── config/          # DB connection & seed script
+│   ├── controllers/     # Route logic (auth, projects, skills, messages)
+│   ├── middleware/      # JWT auth middleware
+│   ├── models/          # Mongoose schemas (Admin, Project, Skill, Message)
+│   └── routes/          # REST API endpoints (/api/*)
 └── README.md
 ```
+
+---
+
+## API Summary (Quick Reference)
+
+| Method | Route | Protection | Description |
+|---|---|---|---|
+| `GET` | `/api/health` | Public | Liveness probe & service status |
+| `POST` | `/api/auth/login` | Public | Admin login & JWT retrieval |
+| `GET` | `/api/projects` | Public | List all / featured projects |
+| `GET` | `/api/projects/:id` | Public | Single project detail |
+| `POST` | `/api/projects` | **Protected** | Create project |
+| `PUT` | `/api/projects/:id` | **Protected** | Update project |
+| `DELETE` | `/api/projects/:id` | **Protected** | Delete project |
+| `GET` | `/api/skills` | Public | List skills |
+| `POST` | `/api/skills` | **Protected** | Create skill |
+| `PUT` | `/api/skills/:id` | **Protected** | Update skill |
+| `DELETE` | `/api/skills/:id` | **Protected** | Delete skill |
+| `POST` | `/api/messages` | Public | Submit contact message |
+| `GET` | `/api/messages` | **Protected** | Read admin messages |
+| `PATCH` | `/api/messages/:id/read` | **Protected** | Mark message as read |
+
+Detailed documentation available at [`server/README.md`](server/README.md).
 
 ---
 
@@ -52,16 +75,13 @@ portfolio-project/
 ```bash
 cd server
 npm install
-# Create .env from .env.example
-npm run dev
+npm run seed  # Seeds default admin user
+npm run dev   # Starts server at http://localhost:5000
 ```
-Server runs at `http://localhost:5000`
 
 ### 2. Client Setup
 ```bash
 cd client
 npm install
-# Create .env from .env.example
-npm run dev
+npm run dev   # Starts client at http://localhost:5173
 ```
-Client runs at `http://localhost:5173`
