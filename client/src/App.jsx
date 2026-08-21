@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
 import Projects from './pages/Projects.jsx';
 import ProjectDetail from './pages/ProjectDetail.jsx';
@@ -16,6 +17,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
+          {/* Public routes */}
           <Route index element={<Home />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
@@ -23,8 +25,21 @@ function App() {
           <Route path="experience" element={<Experience />} />
           <Route path="contact" element={<Contact />} />
           <Route path="resume" element={<Resume />} />
+
+          {/* Admin auth route */}
           <Route path="admin/login" element={<AdminLogin />} />
-          <Route path="admin" element={<AdminDashboard />} />
+
+          {/* Protected admin dashboard route */}
+          <Route
+            path="admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 fallback */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
