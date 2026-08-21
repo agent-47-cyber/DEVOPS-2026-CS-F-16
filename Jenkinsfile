@@ -86,6 +86,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Automated Tests') {
+            steps {
+                echo 'Running automated test suites for backend and frontend...'
+                dir('server') {
+                    script {
+                        if (isUnix()) {
+                            sh 'npm test'
+                        } else {
+                            bat 'npm test'
+                        }
+                    }
+                }
+                dir('client') {
+                    script {
+                        if (isUnix()) {
+                            sh 'npm test'
+                        } else {
+                            bat 'npm test'
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -94,7 +118,7 @@ pipeline {
         }
         success {
             echo '===================================================='
-            echo '✅ CI PIPELINE PASSED: Checkout, Install, Lint, Build & Syntax Check Successful.'
+            echo '✅ CI PIPELINE PASSED: Checkout, Install, Lint, Build, Syntax Check & Automated Tests Successful.'
             echo '===================================================='
         }
         failure {
