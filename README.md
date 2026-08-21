@@ -13,7 +13,7 @@ Strictly aligned with the RTU syllabus:
 | **AJAX / Data Exchange** | Fetch API |
 | **Frontend Framework** | React (Vite, Functional Components, Hooks) |
 | **Routing** | React Router |
-| **Client State** | Redux (Redux Toolkit) — Admin/Auth State |
+| **Client State** | Redux — Admin/Auth State |
 | **Backend Runtime** | Node.js |
 | **Backend Framework** | Express.js (REST APIs, Middleware, Static Files) |
 | **Database** | MongoDB |

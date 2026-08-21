@@ -9,7 +9,7 @@
 | AJAX/data exchange | `fetch` (AJAX concept from module 3) | Web Dev Module 3 |
 | Frontend framework | **React** (functional components, JSX, hooks) via Vite | Web Dev Module 4 |
 | Routing | **React Router** | Web Dev Module 4 |
-| Client state | **Redux** (Redux Toolkit) — used only for admin/auth state, not everywhere | Web Dev Module 4 |
+| Client state | **Redux** — used only for admin/auth state, not everywhere | Web Dev Module 4 |
 | Backend runtime | **Node.js** | Web Dev Module 5 |
 | Backend framework | **Express.js** (REST APIs, middleware, static files) | Web Dev Module 5 |
 | Database | **MongoDB** | Web Dev Module 6 |
@@ -19,6 +19,10 @@
 | Containerization | **Docker** | DevOps Module 5 |
 | Orchestration | **Kubernetes** (Pods, Deployments, Services) | DevOps Module 6 |
 | Monitoring | **Prometheus + Grafana** | DevOps Module 6 |
+
+> **Implementation Note on Redux:** The syllabus requirement being demonstrated is Redux (*"Introduction to Redux"*, Web Dev Module 4). Redux Toolkit (`@reduxjs/toolkit` + `react-redux`) is used as the standard, modern implementation tooling for Redux. No additional state-management framework is used.
+
+> **Implementation Note on CI Linting:** In Phase 9 (Jenkins CI Pipeline), standard ESLint will be configured and run on both `client/` and `server/` per `03_DEVOPS_PIPELINE_CONSTRAINTS.md`.
 
 ## Explicitly NOT allowed
 
