@@ -31,7 +31,7 @@ services:
     networks:
       - portfolio-network
 
-  # 3. React Vite Frontend (Nginx Alpine Multi-Stage Container)
+  # 3. React Vite Frontend (Node.js Alpine Multi-Stage Container)
   client:
     build:
       context: ./client
@@ -41,7 +41,7 @@ services:
     container_name: portfolio-client
     restart: unless-stopped
     ports:
-      - "5173:80"
+      - "5173:5173"
     depends_on:
       - server
     networks:
