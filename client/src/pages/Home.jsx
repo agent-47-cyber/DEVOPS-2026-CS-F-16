@@ -1,18 +1,23 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal.jsx';
+import { getProjects } from '../api/index.js';
+import { useApi } from '../hooks/useApi.js';
 
 function Home() {
+  const { data: featuredProjects, loading, error, refetch } = useApi(
+    () => getProjects({ featured: true }),
+    []
+  );
+
   return (
     <div className="space-y-24 py-4">
-      {/* 1. Hero Section (Staggered Load Animation via CSS keyframes) */}
+      {/* 1. Hero Section */}
       <section className="space-y-8 pt-4 pb-8">
-        {/* Availability Badge */}
         <div className="animate-hero-1 inline-flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900/80 px-3.5 py-1.5 text-xs text-neutral-300 backdrop-blur">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-dot" />
           <span>Available for Fullstack & DevOps Roles</span>
         </div>
 
-        {/* Main Headline */}
         <div className="space-y-4">
           <h1 className="animate-hero-2 text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.1]">
             Building robust web applications and automated delivery pipelines.
@@ -22,7 +27,6 @@ function Home() {
           </p>
         </div>
 
-        {/* Hero CTA Actions */}
         <div className="animate-hero-4 flex flex-wrap items-center gap-4 pt-2">
           <Link
             to="/projects"
@@ -44,7 +48,6 @@ function Home() {
           </Link>
         </div>
 
-        {/* Quick Core Tech Strip */}
         <div className="animate-hero-5 pt-8 border-t border-neutral-900">
           <p className="text-xs font-mono uppercase tracking-widest text-neutral-500 mb-3">Core Technologies</p>
           <div className="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
@@ -57,7 +60,7 @@ function Home() {
         </div>
       </section>
 
-      {/* 2. Story / About Section (Scroll-Driven Reveal via IntersectionObserver) */}
+      {/* 2. Story / Philosophy Section */}
       <section className="space-y-12">
         <Reveal>
           <div className="space-y-3">
@@ -91,7 +94,7 @@ function Home() {
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Scalable Backend</h3>
               <p className="text-sm text-neutral-400 leading-relaxed">
-                RESTful APIs and microservices structured with Express and MongoDB, featuring strict validation and JWT security.
+                RESTful APIs and services structured with Express and MongoDB, featuring strict validation and JWT security.
               </p>
             </div>
           </Reveal>
@@ -110,13 +113,13 @@ function Home() {
         </div>
       </section>
 
-      {/* 3. Featured Work Preview Section (Scroll-Driven Reveal) */}
+      {/* 3. Real Featured Projects (Wired to Backend API) */}
       <section className="space-y-8">
         <Reveal>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-neutral-800 pb-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Selected Work</span>
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Featured Case Studies</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Featured Projects</h2>
             </div>
             <Link
               to="/projects"
@@ -127,53 +130,80 @@ function Home() {
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Reveal delay={150}>
-            <Link
-              to="/projects/portfolio-capstone"
-              className="group block rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 hover:bg-neutral-900/80 hover:shadow-xl"
-            >
-              <div className="flex items-center justify-between text-xs font-mono text-neutral-500 mb-4">
-                <span>FULLSTACK & DEVOPS</span>
-                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+        {loading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[1, 2].map((n) => (
+              <div key={n} className="animate-pulse rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-6 h-64 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="h-3 w-24 bg-neutral-800 rounded" />
+                  <div className="h-6 w-3/4 bg-neutral-800 rounded" />
+                  <div className="h-4 w-full bg-neutral-800/60 rounded" />
+                  <div className="h-4 w-5/6 bg-neutral-800/60 rounded" />
+                </div>
+                <div className="h-6 w-1/2 bg-neutral-800 rounded" />
               </div>
-              <h3 className="text-xl font-bold text-white group-hover:text-neutral-100 mb-2">
-                Fullstack Capstone & DevOps Platform
-              </h3>
-              <p className="text-sm text-neutral-400 mb-4 leading-relaxed">
-                Production-grade portfolio system with automated CI/CD pipeline, Docker containerization, and Kubernetes cluster orchestration.
-              </p>
-              <div className="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
-                {['React', 'Node.js', 'Docker', 'Kubernetes'].map((t) => (
-                  <span key={t} className="rounded bg-neutral-800/80 px-2 py-0.5">{t}</span>
-                ))}
-              </div>
-            </Link>
-          </Reveal>
+            ))}
+          </div>
+        )}
 
-          <Reveal delay={250}>
-            <Link
-              to="/projects/cloud-monitoring-service"
-              className="group block rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 hover:bg-neutral-900/80 hover:shadow-xl"
+        {error && (
+          <div className="rounded-xl border border-red-900/50 bg-red-950/20 p-6 text-center space-y-3">
+            <p className="text-sm text-red-400 font-mono">Failed to fetch featured projects: {error}</p>
+            <button
+              onClick={refetch}
+              className="rounded-md border border-red-800 bg-red-900/40 px-3 py-1 text-xs text-red-200 hover:bg-red-900/60 transition-colors"
             >
-              <div className="flex items-center justify-between text-xs font-mono text-neutral-500 mb-4">
-                <span>OBSERVABILITY</span>
-                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </div>
-              <h3 className="text-xl font-bold text-white group-hover:text-neutral-100 mb-2">
-                Prometheus & Grafana Telemetry Hub
-              </h3>
-              <p className="text-sm text-neutral-400 mb-4 leading-relaxed">
-                Real-time application telemetry dashboard tracking request rates, error thresholds, and Node process resource utilization.
-              </p>
-              <div className="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
-                {['Prometheus', 'Grafana', 'Express', 'Alertmanager'].map((t) => (
-                  <span key={t} className="rounded bg-neutral-800/80 px-2 py-0.5">{t}</span>
-                ))}
-              </div>
-            </Link>
-          </Reveal>
-        </div>
+              Retry
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && (!featuredProjects || featuredProjects.length === 0) && (
+          <div className="rounded-xl border border-neutral-800/80 bg-neutral-900/20 p-12 text-center text-sm text-neutral-500">
+            No featured projects available in database.
+          </div>
+        )}
+
+        {!loading && !error && featuredProjects && featuredProjects.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredProjects.map((project, idx) => (
+              <Reveal key={project._id || project.id || idx} delay={idx * 100}>
+                <Link
+                  to={`/projects/${project._id || project.id}`}
+                  className="group block h-full rounded-xl border border-neutral-800/80 bg-neutral-900/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700 hover:bg-neutral-900/80 hover:shadow-xl flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between text-xs font-mono text-neutral-500 mb-3">
+                      <span className="text-amber-400/90 font-medium">FEATURED PROJECT</span>
+                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white group-hover:text-neutral-100 mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-neutral-400 mb-6 leading-relaxed line-clamp-3">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-neutral-800/60">
+                    <div className="flex flex-wrap gap-1.5 text-xs font-mono text-neutral-400">
+                      {project.techStack?.slice(0, 4).map((tech) => (
+                        <span key={tech} className="rounded bg-neutral-800/80 px-2 py-0.5 text-[11px]">
+                          {tech}
+                        </span>
+                      ))}
+                      {project.techStack?.length > 4 && (
+                        <span className="rounded bg-neutral-800/40 px-1.5 py-0.5 text-[10px] text-neutral-500">
+                          +{project.techStack.length - 4} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
