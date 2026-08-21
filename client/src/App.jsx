@@ -1,15 +1,34 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout.jsx';
+import Home from './pages/Home.jsx';
+import Projects from './pages/Projects.jsx';
+import ProjectDetail from './pages/ProjectDetail.jsx';
+import Skills from './pages/Skills.jsx';
+import Experience from './pages/Experience.jsx';
+import Contact from './pages/Contact.jsx';
+import Resume from './pages/Resume.jsx';
+import AdminLogin from './pages/AdminLogin.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import NotFound from './pages/NotFound.jsx';
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-950 p-6 text-neutral-100">
-      <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-8 text-center shadow-lg backdrop-blur-sm">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">
-          Portfolio Project Client
-        </h1>
-        <p className="mt-2 text-sm text-neutral-400">
-          Phase 1: Repo Scaffolding Complete (Vite + React + Tailwind CSS)
-        </p>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="projects/:id" element={<ProjectDetail />} />
+          <Route path="skills" element={<Skills />} />
+          <Route path="experience" element={<Experience />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="resume" element={<Resume />} />
+          <Route path="admin/login" element={<AdminLogin />} />
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
