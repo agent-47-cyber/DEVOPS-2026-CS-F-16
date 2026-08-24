@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-capstone-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fullstack Portfolio & DevOps Capstone Project",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "seed": "npm --prefix server run seed",
+    "start": "npm --prefix server start",
+    "lint": "npm --prefix client run lint && npm --prefix server run lint",
+    "test": "npm --prefix client test && npm --prefix server test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
