@@ -20,9 +20,10 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
 
+    const jwtSecret = process.env.JWT_SECRET || 'dev_secret_key_rtu_capstone_2026';
     const token = jwt.sign(
       { id: admin._id, username: admin.username },
-      process.env.JWT_SECRET,
+      jwtSecret,
       { expiresIn: '24h' }
     );
 

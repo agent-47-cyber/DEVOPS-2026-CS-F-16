@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        JWT_SECRET = 'dev_secret_key_rtu_capstone_2026'
+        MONGO_URI_TEST = 'mongodb://localhost:27017/portfolio_db_test'
+        NODE_ENV = 'test'
+    }
+
     stages {
         stage('Checkout') {
             steps {
