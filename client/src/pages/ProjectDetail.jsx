@@ -3,13 +3,61 @@ import Reveal from '../components/Reveal.jsx';
 import { getProject } from '../api/index.js';
 import { useApi } from '../hooks/useApi.js';
 
+const DEFAULT_PROJECTS = [
+  {
+    _id: 'devscope-ai-01',
+    title: 'DevScope AI',
+    description: 'An AI-powered developer intelligence platform providing real-time code analysis, intelligent architecture inspection, automated workflow insights, and interactive developer tooling.',
+    techStack: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'AI Integration', 'Vercel'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://devscopeai-nine.vercel.app/',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 1
+  },
+  {
+    _id: 'portfolio-capstone-02',
+    title: 'Fullstack Portfolio & DevOps Platform',
+    description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
+    techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'http://localhost:5173',
+    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 2
+  },
+  {
+    _id: 'cicd-infra-03',
+    title: 'Automated CI/CD & Cloud Infrastructure',
+    description: 'Production-grade declarative automation pipeline orchestrating GitHub webhook triggers, automated multi-stage Docker image builds, code quality & security testing gates, and seamless multi-container cluster deployments.',
+    techStack: ['Jenkins', 'Docker', 'Kubernetes', 'GitHub Actions', 'Linux / Bash', 'Nginx'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 3
+  },
+  {
+    _id: 'observability-04',
+    title: 'Distributed Observability & Telemetry Hub',
+    description: 'Real-time application performance monitoring infrastructure instrumented with Prometheus client metrics, Grafana visualization dashboards, request rate histograms, latency tracking, and threshold alerts.',
+    techStack: ['Prometheus', 'Grafana', 'Node.js', 'Express', 'Docker'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://github.com/agent-47-cyber',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
+    featured: false,
+    order: 4
+  }
+];
+
 function ProjectDetail() {
   const { id } = useParams();
-  const { data: project, loading, error } = useApi(() => getProject(id), [id]);
+  const { data: remoteProject, loading, error } = useApi(() => getProject(id), [id]);
+  const fallbackProject = DEFAULT_PROJECTS.find(p => p._id === id || p.id === id);
+  const project = remoteProject || fallbackProject;
 
-  if (loading) return <div className="flex min-h-screen items-center justify-center"><div className="h-2 w-48 animate-pulse bg-white/30" /></div>;
-  if (error) return <div className="flex min-h-screen items-center justify-center px-5 text-center"><div><p className="font-mono text-sm text-red-300">Unable to load this project.</p><Link to="/projects" className="mt-5 inline-block border-b border-white pb-1 text-sm">Back to work</Link></div></div>;
-  if (!project) return null;
+  if (loading && !project) return <div className="flex min-h-screen items-center justify-center"><div className="h-2 w-48 animate-pulse bg-white/30" /></div>;
+  if (!project) return <div className="flex min-h-screen items-center justify-center px-5 text-center"><div><p className="font-mono text-sm text-red-300">Unable to load this project.</p><Link to="/projects" className="mt-5 inline-block border-b border-white pb-1 text-sm">Back to work</Link></div></div>;
 
   return (
     <div className="min-h-screen pt-28">

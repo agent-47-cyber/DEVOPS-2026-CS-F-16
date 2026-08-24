@@ -39,7 +39,7 @@ function ProjectEntry({ project, index }) {
             </Link>
           </div>
         </div>
-        <div className="work-image order-1 aspect-[4/3] overflow-hidden rounded-xl bg-gray-100 shadow-md md:order-2">
+        <div className="work-image order-1 aspect-[5/4] overflow-hidden rounded-xl bg-gray-100 shadow-md md:order-2">
           <Link to={`/projects/${project._id || project.id}`} className="block h-full w-full group">
             {project.imageUrl ? (
               <img
@@ -61,8 +61,56 @@ function ProjectEntry({ project, index }) {
   );
 }
 
+const DEFAULT_PROJECTS = [
+  {
+    _id: 'devscope-ai-01',
+    title: 'DevScope AI',
+    description: 'An AI-powered developer intelligence platform providing real-time code analysis, intelligent architecture inspection, automated workflow insights, and interactive developer tooling.',
+    techStack: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'AI Integration', 'Vercel'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://devscopeai-nine.vercel.app/',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 1
+  },
+  {
+    _id: 'portfolio-capstone-02',
+    title: 'Fullstack Portfolio',
+    description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
+    techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'http://localhost:5173',
+    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 2
+  },
+  {
+    _id: 'cicd-infra-03',
+    title: 'Automated CI/CD & Cloud Infrastructure',
+    description: 'Production-grade declarative automation pipeline orchestrating GitHub webhook triggers, automated multi-stage Docker image builds, code quality & security testing gates, and seamless multi-container cluster deployments.',
+    techStack: ['Jenkins', 'Docker', 'Kubernetes', 'GitHub Actions', 'Linux / Bash', 'Nginx'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 3
+  },
+  {
+    _id: 'observability-04',
+    title: 'Distributed Observability & Telemetry Hub',
+    description: 'Real-time application performance monitoring infrastructure instrumented with Prometheus client metrics, Grafana visualization dashboards, request rate histograms, latency tracking, and threshold alerts.',
+    techStack: ['Prometheus', 'Grafana', 'Node.js', 'Express', 'Docker'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://github.com/agent-47-cyber',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
+    featured: false,
+    order: 4
+  }
+];
+
 function Projects() {
-  const { data: projects, loading, error, refetch } = useApi(getProjects, []);
+  const { data: remoteProjects, loading, error, refetch } = useApi(getProjects, []);
+  const projects = (remoteProjects && remoteProjects.length > 0) ? remoteProjects : DEFAULT_PROJECTS;
   const [selectedTag, setSelectedTag] = useState('All');
   const tags = useMemo(() => ['All', ...new Set((projects || []).flatMap((project) => project.techStack || []))], [projects]);
   const visibleProjects = useMemo(() => selectedTag === 'All' ? projects || [] : (projects || []).filter((project) => project.techStack?.includes(selectedTag)), [projects, selectedTag]);
@@ -74,10 +122,9 @@ function Projects() {
         {tags.length > 1 && <Reveal className="mt-12 border-y border-black/20 py-4"><div className="flex flex-wrap gap-x-5 gap-y-2">{tags.map((tag) => <button key={tag} type="button" onClick={() => setSelectedTag(tag)} className={`text-xs ${selectedTag === tag ? 'font-bold text-black underline' : 'text-black/50 hover:text-black'}`}>{tag}</button>)}</div></Reveal>}
       </div></section>
       <section className="px-5 pb-28 md:px-10"><div className="mx-auto max-w-[1400px] space-y-14 md:space-y-24">
-        {loading && [1, 2, 3].map((item) => <div key={item} className="h-80 animate-pulse border-t border-black/20 bg-black/5" />)}
-        {error && <div className="py-20"><p className="font-mono text-sm text-red-700">Unable to load work: {error}</p><button type="button" className="mt-5 border-b border-black pb-1 text-sm" onClick={refetch}>Try again</button></div>}
-        {!loading && !error && visibleProjects.length === 0 && <p className="py-20 font-mono text-sm text-black/55">No projects match this selection.</p>}
-        {!loading && !error && visibleProjects.map((project, index) => <Reveal key={project._id || project.id}><ProjectEntry project={project} index={index} /></Reveal>)}
+        {loading && !projects.length && [1, 2, 3].map((item) => <div key={item} className="h-80 animate-pulse border-t border-black/20 bg-black/5" />)}
+        {visibleProjects.length === 0 && <p className="py-20 font-mono text-sm text-black/55">No projects match this selection.</p>}
+        {visibleProjects.map((project, index) => <Reveal key={project._id || project.id}><ProjectEntry project={project} index={index} /></Reveal>)}
       </div></section>
     </div>
   );

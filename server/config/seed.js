@@ -20,9 +20,9 @@ const SAMPLE_PROJECTS = [
     order: 1
   },
   {
-    title: 'Fullstack Portfolio & DevOps Platform',
+    title: 'Fullstack Portfolio',
     description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
-    techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Docker', 'Kubernetes', 'Jenkins', 'Prometheus'],
+    techStack: ['React 19', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Docker', 'Kubernetes', 'Jenkins', 'Prometheus'],
     repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
     liveUrl: 'http://localhost:5173',
     imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
@@ -30,21 +30,21 @@ const SAMPLE_PROJECTS = [
     order: 2
   },
   {
-    title: 'Kubernetes Microservices Mesh',
-    description: 'Declarative Kubernetes architecture configuring multi-tier Pods, ClusterIP/NodePort Services, ConfigMaps, Secrets, and automated health probes for resilient service scaling.',
-    techStack: ['Kubernetes', 'Docker', 'Node.js', 'Nginx'],
-    repoUrl: 'https://github.com/agent-47-cyber/k8s-microservices',
-    liveUrl: 'https://k8s-demo.example.com',
-    imageUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&auto=format&fit=crop&q=80',
-    featured: true,
+    title: 'Automated CI/CD & Cloud Infrastructure',
+    description: 'Production-grade declarative automation pipeline orchestrating GitHub webhook triggers, automated multi-stage Docker image builds, code quality & security testing gates, and seamless multi-container cluster deployments.',
+    techStack: ['Jenkins', 'Docker', 'Kubernetes', 'GitHub Actions', 'Linux / Bash', 'Nginx'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop&q=80',
+    featured: false,
     order: 3
   },
   {
-    title: 'Prometheus & Grafana Telemetry Hub',
-    description: 'Real-time observability system instrumented with prom-client to monitor HTTP traffic rates, latency histograms, error thresholds, and Node process health in Grafana dashboards.',
-    techStack: ['Prometheus', 'Grafana', 'Node.js', 'Express'],
-    repoUrl: 'https://github.com/agent-47-cyber/prometheus-telemetry',
-    liveUrl: 'https://grafana-demo.example.com',
+    title: 'Distributed Observability & Telemetry Hub',
+    description: 'Real-time application performance monitoring infrastructure instrumented with Prometheus client metrics, Grafana visualization dashboards, request rate histograms, latency tracking, and threshold alerts.',
+    techStack: ['Prometheus', 'Grafana', 'Node.js', 'Express', 'Docker'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://github.com/agent-47-cyber',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
     featured: false,
     order: 4
