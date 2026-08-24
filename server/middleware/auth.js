@@ -10,7 +10,8 @@ const auth = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const jwtSecret = process.env.JWT_SECRET || 'dev_secret_key_rtu_capstone_2026';
+    const decoded = jwt.verify(token, jwtSecret);
     req.admin = decoded;
     next();
   } catch {
