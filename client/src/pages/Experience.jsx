@@ -1,7 +1,7 @@
 import Reveal from '../components/Reveal.jsx';
 
 const timeline = [
-  ['2022 — 2026', 'B.Tech in Computer Science', 'Rajasthan Technical University (RTU)', 'A foundation in data structures, operating systems, databases, networking, and software engineering.'],
+  ['2024 — 2028', 'B.Tech in Computer Science', 'SKIT Jaipur', 'A foundation in data structures, operating systems, databases, networking, and software engineering.'],
   ['2024 — Present', 'Fullstack & DevOps engineering practicum', 'Capstone engineering lab', 'Building containerized web systems with React, Express, MongoDB, automated checks, and continuous delivery.'],
   ['2023 — 2024', 'Advanced web applications & microservices', 'Self-directed applied engineering', 'Developing responsive interfaces, REST APIs, JWT-protected flows, and deliberate state management.'],
 ];
