@@ -4,11 +4,51 @@ import Reveal from '../components/Reveal.jsx';
 import { getProjects } from '../api/index.js';
 import { useApi } from '../hooks/useApi.js';
 
+const DEFAULT_FEATURED_PROJECTS = [
+  {
+    _id: 'devscope-ai-01',
+    title: 'DevScope AI',
+    description: 'An AI-powered developer intelligence platform providing real-time code analysis, intelligent architecture inspection, automated workflow insights, and interactive developer tooling.',
+    techStack: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'AI Integration', 'Vercel'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://devscopeai-nine.vercel.app/',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 1
+  },
+  {
+    _id: 'portfolio-capstone-02',
+    title: 'Fullstack Portfolio & DevOps Platform',
+    description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
+    techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
+    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
+    liveUrl: 'http://localhost:5173',
+    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 2
+  },
+  {
+    _id: 'k8s-mesh-03',
+    title: 'Kubernetes Microservices Mesh',
+    description: 'Declarative Kubernetes architecture configuring multi-tier Pods, ClusterIP/NodePort Services, ConfigMaps, Secrets, and automated health probes for resilient service scaling.',
+    techStack: ['Kubernetes', 'Docker', 'Node.js', 'Nginx'],
+    repoUrl: 'https://github.com/agent-47-cyber/k8s-microservices',
+    liveUrl: 'https://k8s-demo.example.com',
+    imageUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 3
+  }
+];
+
 function Home() {
-  const { data: featuredProjects, loading, error } = useApi(
+  const { data: remoteProjects, loading, error } = useApi(
     () => getProjects({ featured: true }),
     []
   );
+
+  const featuredProjects = (remoteProjects && remoteProjects.length > 0)
+    ? remoteProjects
+    : DEFAULT_FEATURED_PROJECTS;
 
   const [activeStack, setActiveStack] = useState('frontend');
 
@@ -40,7 +80,7 @@ function Home() {
         id="hero-section"
         className="relative flex min-h-screen w-full flex-col items-center justify-center text-center px-6"
       >
-        <h1 className="flex w-full flex-col items-center gap-2 text-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.08]">
+        <h1 className="page-enter-hero flex w-full flex-col items-center gap-2 text-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.08]">
           <span className="inline-block whitespace-nowrap">say hello to your</span>
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
             <span
@@ -54,7 +94,7 @@ function Home() {
         </h1>
 
         {/* Scroll indicator positioned at bottom-[25%] */}
-        <div className="absolute bottom-[25%] flex flex-col items-center gap-3">
+        <div className="page-enter-hint absolute bottom-[25%] flex flex-col items-center gap-3">
           <span className="scroll-text text-[10px] uppercase font-mono tracking-[0.25em] text-white/70">
             Have a look
           </span>
@@ -542,11 +582,12 @@ function Home() {
 
       {/* =========================================================================
           CHAPTER 6 — SELECTED WORK PREVIEW (Editorial Light Background)
-          Reference: Light background, two-column offset desktop layout, corner handles
+          Reference: Light background, two-column offset desktop layout, corner handles,
+          and playful collaborative cursor tags (Milena, You, Joschi, Anonym, Lilia)
           ========================================================================= */}
       <section
         id="selected-work-section"
-        className="section-light relative min-h-screen w-full px-6 md:px-16 pb-32 pt-16 border-t border-gray-200"
+        className="section-light relative min-h-screen w-full px-6 md:px-16 pb-32 pt-16 border-t border-gray-200 overflow-hidden"
       >
         {/* Section Heading with playful collaborator badge */}
         <div className="relative flex flex-col items-center justify-center pt-20 pb-16 text-center">
@@ -556,13 +597,23 @@ function Home() {
             </h2>
           </Reveal>
 
-          {/* Collaborator cursor decoration */}
-          <div className="absolute right-[12%] sm:right-[20%] top-[30%] hidden sm:flex items-center gap-1.5 animate-float-subtle">
+          {/* Collaborator Cursor: Milena (Top-Left) */}
+          <div className="absolute left-[8%] sm:left-[18%] top-[25%] hidden sm:flex items-center gap-1.5 animate-float-subtle">
+            <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
+              <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#a855f7" stroke="white" strokeWidth="1.5" />
+            </svg>
+            <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#a855f7] shadow-md">
+              Milena
+            </span>
+          </div>
+
+          {/* Collaborator Cursor: You (Top-Right) */}
+          <div className="absolute right-[10%] sm:right-[22%] top-[28%] hidden sm:flex items-center gap-1.5 animate-float-reverse">
             <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
               <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#0FC97C" stroke="white" strokeWidth="1.5" />
             </svg>
             <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#0FC97C] shadow-md">
-              Live System
+              You
             </span>
           </div>
         </div>
@@ -587,25 +638,46 @@ function Home() {
           </div>
         )}
 
-        {/* Empty state */}
-        {!loading && !error && (!featuredProjects || featuredProjects.length === 0) && (
-          <div className="text-center py-16 text-sm text-gray-500 font-mono">
-            No featured projects currently available.
-          </div>
-        )}
-
         {/* Editorial Project Cards — Responsive Asymmetric Layout */}
         {!loading && !error && featuredProjects && featuredProjects.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 max-w-4xl mx-auto">
+          <div className="relative grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 max-w-4xl mx-auto">
+            {/* Collaborator Cursor: Joschi */}
+            <div className="absolute left-[38%] top-[34%] z-20 hidden md:flex items-center gap-1.5 animate-float-subtle">
+              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
+                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#00a3ff" stroke="white" strokeWidth="1.5" />
+              </svg>
+              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#00a3ff] shadow-md">
+                Joschi
+              </span>
+            </div>
+
+            {/* Collaborator Cursor: Anonym */}
+            <div className="absolute right-[-4%] top-[56%] z-20 hidden lg:flex items-center gap-1.5 animate-float-reverse">
+              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
+                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#4f46e5" stroke="white" strokeWidth="1.5" />
+              </svg>
+              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#4f46e5] shadow-md">
+                Anonym
+              </span>
+            </div>
+
+            {/* Collaborator Cursor: Lilia */}
+            <div className="absolute right-[4%] bottom-[-2%] z-20 hidden md:flex items-center gap-1.5 animate-float-subtle">
+              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
+                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#f59e0b" stroke="white" strokeWidth="1.5" />
+              </svg>
+              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#f59e0b] shadow-md">
+                Lilia
+              </span>
+            </div>
+
             {featuredProjects.map((project, idx) => (
               <div
                 key={project._id || project.id || idx}
                 className={idx % 2 === 1 ? 'md:mt-20 w-full' : 'w-full'}
               >
-                <Reveal delay={idx * 100}>
-                  <Link className="block w-full" to={`/projects/${project._id || project.id}`}>
-                    <ProjectCard project={project} index={idx} isSelected={idx === 0} />
-                  </Link>
+                <Reveal delay={idx * 120}>
+                  <ProjectCard project={project} index={idx} isSelected={idx === 0} />
                 </Reveal>
               </div>
             ))}
@@ -613,10 +685,10 @@ function Home() {
         )}
 
         {/* Footer link to view full catalog */}
-        <div className="mt-20 text-center">
+        <div className="mt-24 text-center">
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-black text-white px-7 py-3 text-xs font-mono uppercase tracking-wider hover:bg-gray-800 transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-black text-white px-8 py-3.5 text-xs font-mono uppercase tracking-wider hover:bg-gray-800 transition-colors shadow-lg"
           >
             <span>All work</span>
             <span>&rarr;</span>
@@ -628,14 +700,27 @@ function Home() {
 }
 
 /**
- * Editorial project card matching reference design with corner handles and fallbacks.
+ * Editorial project card matching reference design with corner handles and live external links.
  */
 function ProjectCard({ project, index, isSelected }) {
   return (
-    <div className="flex w-full flex-col gap-1.5">
-      <span className={`text-[11px] font-medium tracking-wide transition-colors duration-150 ${isSelected ? 'text-[#00a3ff]' : 'text-gray-400'}`}>
-        Project {index + 1}
-      </span>
+    <div className="flex w-full flex-col gap-1.5 group">
+      <div className="flex items-center justify-between">
+        <span className={`text-[11px] font-medium tracking-wide transition-colors duration-150 ${isSelected ? 'text-[#00a3ff]' : 'text-gray-400'}`}>
+          Project {index + 1}
+        </span>
+        {project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] font-mono font-semibold text-[#00a3ff] hover:underline flex items-center gap-1"
+          >
+            <span>Visit Live</span>
+            <span>↗</span>
+          </a>
+        )}
+      </div>
 
       <div className={`project-card-light ${isSelected ? 'project-card-selected' : ''}`}>
         {/* Corner selection handles for Project 1 */}
@@ -654,7 +739,7 @@ function ProjectCard({ project, index, isSelected }) {
             <img
               alt={project.title}
               loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               src={project.imageUrl}
               onError={(e) => {
                 e.target.style.display = 'none';
@@ -671,17 +756,25 @@ function ProjectCard({ project, index, isSelected }) {
         </div>
 
         {/* Project details */}
-        <div className="flex flex-col gap-1">
-          <h3 className="text-[15px] font-semibold leading-snug text-black">
-            {project.title}
-          </h3>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-baseline justify-between gap-2">
+            <h3 className="text-[16px] font-semibold leading-snug text-black group-hover:text-[#00a3ff] transition-colors">
+              {project.title}
+            </h3>
+            <span className="shrink-0 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M2.75 1C2.286 1 1.841 1.184 1.513 1.513 1.184 1.841 1 2.286 1 2.75V10.25C1 10.714 1.184 11.159 1.513 11.487 1.841 11.816 2.286 12 2.75 12H10.25C10.714 12 11.159 11.816 11.487 11.487 11.816 11.159 12 10.714 12 10.25V8C12 7.867 12.053 7.74 12.146 7.646 12.24 7.553 12.367 7.5 12.5 7.5 12.633 7.5 12.76 7.553 12.854 7.646 12.947 7.74 13 7.867 13 8V10.25C13 10.979 12.71 11.679 12.195 12.195 11.679 12.71 10.979 13 10.25 13H2.75C2.021 13 1.321 12.71 0.805 12.195 0.29 11.679 0 10.979 0 10.25V2.75C0 2.021 0.29 1.321 0.805 0.805 1.321 0.29 2.021 0 2.75 0H5C5.133 0 5.26 0.053 5.354 0.146 5.447 0.24 5.5 0.367 5.5 0.5 5.5 0.633 5.447 0.76 5.354 0.854 5.26 0.947 5.133 1 5 1H2.75ZM7.5 0.5C7.5 0.367 7.553 0.24 7.646 0.146 7.74 0.053 7.867 0 8 0H12.5C12.633 0 12.76 0.053 12.854 0.146 12.947 0.24 13 0.367 13 0.5V5C13 5.133 12.947 5.26 12.854 5.354 12.76 5.447 12.633 5.5 12.5 5.5 12.367 5.5 12.24 5.447 12.146 5.354 12.053 5.26 12 5.133 12 5V1.707L8.354 5.354C8.259 5.445 8.133 5.495 8.002 5.494 7.871 5.493 7.745 5.44 7.653 5.347 7.56 5.255 7.507 5.129 7.506 4.998 7.505 4.867 7.555 4.741 7.647 4.647L11.293 1H8C7.867 1 7.74 0.947 7.646 0.854 7.553 0.76 7.5 0.633 7.5 0.5Z" fill="black" />
+              </svg>
+            </span>
+          </div>
+
           <p className="text-[13px] leading-snug text-[#555]">
             {project.description?.length > 90
               ? project.description.substring(0, 90) + '...'
               : project.description}
           </p>
 
-          <div className="mt-2 flex items-center justify-between gap-2">
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 pt-1">
             <div className="flex flex-wrap gap-1.5">
               {project.techStack?.slice(0, 3).map((tech) => (
                 <span
@@ -693,11 +786,14 @@ function ProjectCard({ project, index, isSelected }) {
               ))}
             </div>
 
-            <span className="shrink-0 opacity-60" aria-hidden="true">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M2.75 1C2.286 1 1.841 1.184 1.513 1.513 1.184 1.841 1 2.286 1 2.75V10.25C1 10.714 1.184 11.159 1.513 11.487 1.841 11.816 2.286 12 2.75 12H10.25C10.714 12 11.159 11.816 11.487 11.487 11.816 11.159 12 10.714 12 10.25V8C12 7.867 12.053 7.74 12.146 7.646 12.24 7.553 12.367 7.5 12.5 7.5 12.633 7.5 12.76 7.553 12.854 7.646 12.947 7.74 13 7.867 13 8V10.25C13 10.979 12.71 11.679 12.195 12.195 11.679 12.71 10.979 13 10.25 13H2.75C2.021 13 1.321 12.71 0.805 12.195 0.29 11.679 0 10.979 0 10.25V2.75C0 2.021 0.29 1.321 0.805 0.805 1.321 0.29 2.021 0 2.75 0H5C5.133 0 5.26 0.053 5.354 0.146 5.447 0.24 5.5 0.367 5.5 0.5 5.5 0.633 5.447 0.76 5.354 0.854 5.26 0.947 5.133 1 5 1H2.75ZM7.5 0.5C7.5 0.367 7.553 0.24 7.646 0.146 7.74 0.053 7.867 0 8 0H12.5C12.633 0 12.76 0.053 12.854 0.146 12.947 0.24 13 0.367 13 0.5V5C13 5.133 12.947 5.26 12.854 5.354 12.76 5.447 12.633 5.5 12.5 5.5 12.367 5.5 12.24 5.447 12.146 5.354 12.053 5.26 12 5.133 12 5V1.707L8.354 5.354C8.259 5.445 8.133 5.495 8.002 5.494 7.871 5.493 7.745 5.44 7.653 5.347 7.56 5.255 7.507 5.129 7.506 4.998 7.505 4.867 7.555 4.741 7.647 4.647L11.293 1H8C7.867 1 7.74 0.947 7.646 0.854 7.553 0.76 7.5 0.633 7.5 0.5Z" fill="black" />
-              </svg>
-            </span>
+            <div className="flex items-center gap-3 text-xs font-mono">
+              <Link
+                to={`/projects/${project._id || project.id}`}
+                className="text-gray-700 hover:text-black font-semibold underline decoration-gray-300 underline-offset-2"
+              >
+                Case Study
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -234,6 +234,79 @@
 .wireframe-handle.ml { top: 50%; left: -4px; transform: translateY(-50%); }
 .wireframe-handle.mr { top: 50%; right: -4px; transform: translateY(-50%); }
 
+/* Page Load Stagger Entrance Keyframes */
+@keyframes pageLoadFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageLoadScaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.page-enter-hero {
+  animation: pageLoadFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-enter-sub {
+  animation: pageLoadFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+.page-enter-hint {
+  animation: pageLoadFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both;
+}
+
+/* Text Pop / Reveal on Viewport Entry */
+.pop-heading {
+  opacity: 0;
+  transform: translateY(22px) scale(0.98);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.pop-heading.is-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.pop-sub {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.12s, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+  will-change: opacity, transform;
+}
+
+.pop-sub.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger item reveal for skills and tags */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-revealed .stagger-item,
+.stagger-item.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -246,8 +319,15 @@
   }
 
   .reveal-init,
-  .reveal-scale {
+  .reveal-scale,
+  .pop-heading,
+  .pop-sub,
+  .stagger-item,
+  .page-enter-hero,
+  .page-enter-sub,
+  .page-enter-hint {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
   }
 }
