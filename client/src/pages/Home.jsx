@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal.jsx';
+import { useSvgDraw } from '../hooks/useSvgDraw.js';
 import { getProjects } from '../api/index.js';
 import { useApi } from '../hooks/useApi.js';
 
@@ -18,7 +19,7 @@ const DEFAULT_FEATURED_PROJECTS = [
   },
   {
     _id: 'portfolio-capstone-02',
-    title: 'Fullstack Portfolio & DevOps Platform',
+    title: 'Fullstack Portfolio',
     description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
     techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
     repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
@@ -26,17 +27,6 @@ const DEFAULT_FEATURED_PROJECTS = [
     imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
     featured: true,
     order: 2
-  },
-  {
-    _id: 'k8s-mesh-03',
-    title: 'Kubernetes Microservices Mesh',
-    description: 'Declarative Kubernetes architecture configuring multi-tier Pods, ClusterIP/NodePort Services, ConfigMaps, Secrets, and automated health probes for resilient service scaling.',
-    techStack: ['Kubernetes', 'Docker', 'Node.js', 'Nginx'],
-    repoUrl: 'https://github.com/agent-47-cyber/k8s-microservices',
-    liveUrl: 'https://k8s-demo.example.com',
-    imageUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&auto=format&fit=crop&q=80',
-    featured: true,
-    order: 3
   }
 ];
 
@@ -80,21 +70,23 @@ function Home() {
         id="hero-section"
         className="relative flex min-h-screen w-full flex-col items-center justify-center text-center px-6"
       >
-        <h1 className="page-enter-hero flex w-full flex-col items-center gap-2 text-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.08]">
-          <span className="inline-block whitespace-nowrap">say hello to your</span>
-          <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
-            <span
-              className="gradient-text-reference font-creative text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal"
-              style={{ paddingRight: '0.15em' }}
-            >
-              creative
-            </span>
-            <span className="inline-block whitespace-nowrap">developer</span>
-          </div>
-        </h1>
+        <Reveal>
+          <h1 className="flex w-full flex-col items-center gap-2 text-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.08]">
+            <span className="hero-line hero-line-1 inline-block whitespace-nowrap">say hello to your</span>
+            <div className="hero-line hero-line-2 flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
+              <span
+                className="gradient-text-reference font-creative text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal"
+                style={{ paddingRight: '0.15em' }}
+              >
+                creative
+              </span>
+              <span className="inline-block whitespace-nowrap">developer</span>
+            </div>
+          </h1>
+        </Reveal>
 
         {/* Scroll indicator positioned at bottom-[25%] */}
-        <div className="page-enter-hint absolute bottom-[25%] flex flex-col items-center gap-3">
+        <div className="hero-line hero-line-3 absolute bottom-[25%] flex flex-col items-center gap-3">
           <span className="scroll-text text-[10px] uppercase font-mono tracking-[0.25em] text-white/70">
             Have a look
           </span>
@@ -112,104 +104,14 @@ function Home() {
           Reference: Grid of 8 cyan & white sketch geometric figures + floating speech card
           ========================================================================= */}
       <section className="relative flex min-h-screen w-full flex-col items-center justify-center px-6 py-24 overflow-hidden">
-        {/* Floating Developer Comment Badge with Cursor */}
+        {/* Floating Developer Comment Badge with Cursor + Morphing Bubble */}
         <div className="absolute z-20 pointer-events-none top-[18%] sm:top-[22%] left-[8%] sm:left-[18%] md:left-[26%] max-w-[85vw] sm:max-w-md">
-          <Reveal>
-            <div className="relative">
-              {/* Cursor Badge */}
-              <div className="absolute -top-4 -left-3 z-30 flex items-center gap-1.5 animate-float-subtle">
-                <svg width="20" height="24" viewBox="0 0 23 28" fill="none" className="drop-shadow-md">
-                  <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#ff30d9" stroke="white" strokeWidth="1.5" />
-                </svg>
-                <span className="py-0.5 px-2.5 text-[12px] font-medium text-white rounded-full bg-[#ff30d9] shadow-lg">
-                  Yatin
-                </span>
-              </div>
-
-              {/* Speech Card */}
-              <div className="rounded-2xl rounded-tl-none border border-white/15 bg-[#1a1a20]/95 backdrop-blur-md p-5 shadow-2xl space-y-2 mt-3">
-                <div className="flex items-baseline gap-2 text-xs">
-                  <span className="font-semibold text-white/90">Yatin</span>
-                  <span className="text-white/40">4 years ago</span>
-                </div>
-                <p className="text-sm sm:text-base text-white/90 font-medium leading-snug">
-                  I started in software logic, focusing on algorithms and interface craft.
-                </p>
-              </div>
-            </div>
-          </Reveal>
+          <ChatBubbleMorph />
         </div>
 
         {/* 8 Geometric Architectural Vector Sketches in 4x2 Grid */}
-        <div className="relative z-10 grid w-full max-w-4xl grid-cols-2 sm:grid-cols-4 items-center justify-items-center gap-8 sm:gap-12 md:gap-16 pt-16">
-          {/* Sketch 1: 3D Wireframe Cube */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 136 163" fill="none" className="w-full h-full object-contain">
-              <path d="M58.9 70.4L55.6 108.1M58.9 70.4L47.3 62.7M58.9 70.4L89.3 59.6M55.6 108.1L130.6 78.2L133.6 43.8M55.6 108.1L6.9 73.7L10.1 37.9M133.6 43.8L79.4 15.3M133.6 43.8L89.3 59.6M10.1 37.9L79.4 15.3M10.1 37.9L47.3 62.7M79.4 15.3L76.1 52.7M76.1 52.7L47.3 62.7M76.1 52.7L89.3 59.6" stroke="#0FD6D9" strokeWidth="4" strokeLinecap="round" />
-              <path d="M15 25C25 18 55 5 57 18C49 28 22 55 25 58C35 48 65 25 70 30C58 48 30 75 32 78C45 68 85 35 90 42C75 65 48 95 50 98" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
+        <SvgSketchGrid />
 
-          {/* Sketch 2: Interconnected Node Matrix */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 130 141" fill="none" className="w-full h-full object-contain">
-              <path d="M91 5L29.7 16.5L11 80.9L50.5 129L112.7 115.7M11.7 81.6L68.8 70" stroke="#0FD6D9" strokeWidth="6" strokeLinecap="round" />
-              <path d="M10 30C25 15 45 2 45 10C35 25 20 50 25 52C40 38 65 22 70 28C55 45 35 78 40 82C60 65 95 38 98 45" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 3: Algorithmic Loop */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 119 101" fill="none" className="w-full h-full object-contain">
-              <path d="M51.7 73.1C81.5 57.7 92.2 51.7 99.7 39.5C107.2 27.3 105.4 17.8 91.5 17.8C77.5 17.8 70.2 17.6 45.5 36.5C20.8 55.4 20.5 58.7 18 70.6C15.5 82.6 27.8 96 43 97.5C58.2 99 94 94.8 107.7 91.5" stroke="#0FD6D9" strokeWidth="5" strokeLinecap="round" />
-              <path d="M5 50C15 38 35 20 40 25C30 40 18 60 22 65C35 50 68 22 72 28C58 48 42 75 48 80C65 65 95 45 98 52" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 4: Double Helix / Flow Graph */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 124 113" fill="none" className="w-full h-full object-contain">
-              <path d="M48.7 47.2L81.1 41.8C87.6 40.8 92 34.6 90.9 28.1C89.9 21.6 83.7 17.2 77.2 18.3L58.8 21.3C42.8 23.9 31.9 39.1 34.6 55.1C37.2 71.2 52.4 82 68.4 79.4L109.3 72.7" stroke="#0FD6D9" strokeWidth="5" strokeLinecap="round" />
-              <path d="M12 28C22 18 35 10 38 15C28 30 15 50 18 55C32 40 60 22 65 28C52 45 35 70 40 75" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 5: Isometric Matrix Node */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 140 150" fill="none" className="w-full h-full object-contain">
-              <path d="M70 15L120 45V105L70 135L20 105V45L70 15Z" stroke="#0FD6D9" strokeWidth="4" />
-              <path d="M70 15V135M20 45L120 105M120 45L20 105" stroke="#0FD6D9" strokeWidth="3" opacity="0.6" />
-              <path d="M25 50C40 35 85 20 90 30C75 55 45 85 50 90C70 75 110 50 115 60" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 6: Cyber Monogram */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 140 140" fill="none" className="w-full h-full object-contain">
-              <path d="M30 30H110V55H60V80H100V105H30V30Z" stroke="#0FD6D9" strokeWidth="5" strokeLinejoin="round" />
-              <path d="M25 35C45 25 95 18 100 25C85 45 50 65 55 70C75 58 105 48 110 55" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 7: Signal Wave Structure */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 136 123" fill="none" className="w-full h-full object-contain">
-              <path d="M119.5 48.7L69.3 56.6C69.3 56.6 76.2 24.7 91.8 23.4C106.4 22.3 119.5 48.7 119.5 48.7Z" stroke="#0FD6D9" strokeWidth="5" />
-              <path d="M59.1 58.2C58 37.2 90.3 14.2 90.3 14.2C90.3 14.2 66.9 9.2 48.2 19.7C33.5 27.9 22.3 49.6 23.2 63.9C24.2 78.7 41.7 101.4 58.6 106.4" stroke="#0FD6D9" strokeWidth="5" />
-              <path d="M15 50C30 35 70 15 75 22C60 45 35 75 40 80" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sketch 8: Integrated Microservice Diagram */}
-          <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
-            <svg width="120" height="140" viewBox="0 0 141 186" fill="none" className="w-full h-full object-contain">
-              <rect x="45.5" y="34.5" width="72.5" height="19.3" rx="9.6" transform="rotate(8 45.5 34.5)" stroke="#0FD6D9" strokeWidth="5" />
-              <path d="M131 92.5L133.1 77.4C133.8 72.3 130.3 67.6 125.2 66.9C120.1 66.2 115.4 69.7 114.7 74.8L114.3 77.7C113.3 84.4 107.1 89.1 100.4 88.1L57.4 81.9C52 81.2 47.1 84.9 46.3 90.2C45.6 95.5 49.3 100.5 54.6 101.2L108.9 109" stroke="#0FD6D9" strokeWidth="5" />
-              <rect x="32.7" y="124" width="72.5" height="19.8" rx="9.9" transform="rotate(8 32.7 124)" stroke="#0FD6D9" strokeWidth="5" />
-              <path d="M35 30C50 20 90 10 95 18C80 40 45 70 50 75" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-        </div>
       </section>
 
       {/* =========================================================================
@@ -278,9 +180,9 @@ function Home() {
             <span className="wireframe-handle mr" aria-hidden="true" />
 
             <h2 className="flex flex-col gap-2 text-3xl sm:text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight">
-              <span>Then I discovered</span>
-              <span className="text-white">fullstack engineering</span>
-              <span className="text-white/50 font-normal">— and loved it.</span>
+              <span className="stagger-item overflow-hidden"><span className="block text-reveal-line">Then I discovered</span></span>
+              <span className="stagger-item overflow-hidden" style={{ transitionDelay: '100ms' }}><span className="block text-reveal-line text-white">fullstack engineering</span></span>
+              <span className="stagger-item overflow-hidden" style={{ transitionDelay: '200ms' }}><span className="block text-reveal-line text-white/50 font-normal">— and loved it.</span></span>
             </h2>
           </div>
         </Reveal>
@@ -326,8 +228,8 @@ function Home() {
           {/* Central Headline */}
           <Reveal>
             <h2 className="flex flex-col gap-1 text-center text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-tight">
-              <span>I started building</span>
-              <span className="text-white">what I architect</span>
+              <span className="stagger-item overflow-hidden"><span className="block text-reveal-line">I started building</span></span>
+              <span className="stagger-item overflow-hidden" style={{ transitionDelay: '120ms' }}><span className="block text-reveal-line text-white">what I architect</span></span>
             </h2>
           </Reveal>
 
@@ -597,29 +499,11 @@ function Home() {
             </h2>
           </Reveal>
 
-          {/* Collaborator Cursor: Milena (Top-Left) */}
-          <div className="absolute left-[8%] sm:left-[18%] top-[25%] hidden sm:flex items-center gap-1.5 animate-float-subtle">
-            <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
-              <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#a855f7" stroke="white" strokeWidth="1.5" />
-            </svg>
-            <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#a855f7] shadow-md">
-              Milena
-            </span>
-          </div>
 
-          {/* Collaborator Cursor: You (Top-Right) */}
-          <div className="absolute right-[10%] sm:right-[22%] top-[28%] hidden sm:flex items-center gap-1.5 animate-float-reverse">
-            <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
-              <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#0FC97C" stroke="white" strokeWidth="1.5" />
-            </svg>
-            <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#0FC97C] shadow-md">
-              You
-            </span>
-          </div>
         </div>
 
         {/* Loading skeleton */}
-        {loading && (
+        {loading && !featuredProjects?.length && (
           <div className="flex flex-col gap-10 max-w-4xl mx-auto">
             {[1, 2].map((n) => (
               <div key={n} className="animate-pulse bg-white rounded-xl p-6 h-72 shadow-sm">
@@ -631,45 +515,10 @@ function Home() {
           </div>
         )}
 
-        {/* Error state */}
-        {error && (
-          <div className="text-center py-16 text-sm text-red-600 font-mono">
-            Failed to load projects from database.
-          </div>
-        )}
-
         {/* Editorial Project Cards — Responsive Asymmetric Layout */}
-        {!loading && !error && featuredProjects && featuredProjects.length > 0 && (
+        {featuredProjects && featuredProjects.length > 0 && (
           <div className="relative grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 max-w-4xl mx-auto">
-            {/* Collaborator Cursor: Joschi */}
-            <div className="absolute left-[38%] top-[34%] z-20 hidden md:flex items-center gap-1.5 animate-float-subtle">
-              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
-                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#00a3ff" stroke="white" strokeWidth="1.5" />
-              </svg>
-              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#00a3ff] shadow-md">
-                Joschi
-              </span>
-            </div>
 
-            {/* Collaborator Cursor: Anonym */}
-            <div className="absolute right-[-4%] top-[56%] z-20 hidden lg:flex items-center gap-1.5 animate-float-reverse">
-              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
-                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#4f46e5" stroke="white" strokeWidth="1.5" />
-              </svg>
-              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#4f46e5] shadow-md">
-                Anonym
-              </span>
-            </div>
-
-            {/* Collaborator Cursor: Lilia */}
-            <div className="absolute right-[4%] bottom-[-2%] z-20 hidden md:flex items-center gap-1.5 animate-float-subtle">
-              <svg width="18" height="22" viewBox="0 0 23 28" fill="none">
-                <path d="M10.7 15.5L5.7 25.5L0.7 1L21.2 13L10.7 15.5Z" fill="#f59e0b" stroke="white" strokeWidth="1.5" />
-              </svg>
-              <span className="py-0.5 px-2.5 text-[11px] font-medium text-white rounded-full bg-[#f59e0b] shadow-md">
-                Lilia
-              </span>
-            </div>
 
             {featuredProjects.map((project, idx) => (
               <div
@@ -684,16 +533,7 @@ function Home() {
           </div>
         )}
 
-        {/* Footer link to view full catalog */}
-        <div className="mt-24 text-center">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-black text-white px-8 py-3.5 text-xs font-mono uppercase tracking-wider hover:bg-gray-800 transition-colors shadow-lg"
-          >
-            <span>All work</span>
-            <span>&rarr;</span>
-          </Link>
-        </div>
+
       </section>
     </div>
   );
@@ -709,7 +549,7 @@ function ProjectCard({ project, index, isSelected }) {
         <span className={`text-[11px] font-medium tracking-wide transition-colors duration-150 ${isSelected ? 'text-[#00a3ff]' : 'text-gray-400'}`}>
           Project {index + 1}
         </span>
-        {project.liveUrl && (
+        {project.liveUrl && index !== 1 && (
           <a
             href={project.liveUrl}
             target="_blank"
@@ -734,7 +574,7 @@ function ProjectCard({ project, index, isSelected }) {
         )}
 
         {/* Image preview with graceful fallback */}
-        <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden bg-[#2a2a30] rounded-lg">
+        <div className="relative mb-4 aspect-square md:aspect-[5/4] w-full overflow-hidden bg-[#2a2a30] rounded-lg">
           {project.imageUrl ? (
             <img
               alt={project.title}
@@ -796,6 +636,129 @@ function ProjectCard({ project, index, isSelected }) {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * ChatBubbleMorph — Circle-to-expanded card with IntersectionObserver.
+ * Matches reference: starts as 50x50 circle, expands on scroll with text fading in.
+ */
+function ChatBubbleMorph() {
+  const bubbleRef = useRef(null);
+
+  useEffect(() => {
+    const el = bubbleRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add('is-expanded');
+        } else {
+          el.classList.remove('is-expanded');
+        }
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="relative">
+      {/* Cursor Badge */}
+      <div className="absolute -top-4 -left-3 z-30 cursor-float-1">
+        <div className="relative inline-flex" style={{ background: 'transparent' }}>
+          <div className="absolute blur-xl opacity-60 pointer-events-none" style={{ width: '40px', height: '40px', backgroundColor: '#ff30d9', borderRadius: '9999px', top: '-8px', left: '-8px' }} />
+          <div className="absolute" style={{ top: '-16px', left: '-10px', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.1))' }}>
+            <svg width="23" height="28" viewBox="0 0 23 28" fill="none">
+              <path d="M10.7139 15.4972L5.71387 25.4972L0.713867 0.997192L21.2139 12.9972L10.7139 15.4972Z" fill="#ff30d9" stroke="white" />
+            </svg>
+          </div>
+          <span className="py-1 px-3 text-[14px] text-white rounded-full whitespace-nowrap relative z-10" style={{ backgroundColor: '#ff30d9', boxShadow: '0px 2px 8px rgba(0,0,0,0.2)' }}>Yatin</span>
+        </div>
+      </div>
+
+      {/* Morphing Bubble */}
+      <div ref={bubbleRef} className="chat-bubble-morph mt-3">
+        <div className="bubble-inner space-y-2">
+          <div className="flex items-baseline gap-2 text-xs">
+            <span className="font-semibold text-white/90 text-[13px] md:text-[16px]">Yatin</span>
+            <span className="text-white/40 text-[13px] md:text-[16px]">1 year ago</span>
+          </div>
+          <p className="text-[18px] md:text-[28px] font-medium leading-[1.25] text-white">
+            I started with algorithms and logic,<br />
+            then turned that curiosity into<br />
+            building things for the web.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * SvgSketchGrid — 8 geometric sketches with stroke-draw animation.
+ * Uses useSvgDraw hook to animate paths on viewport entry.
+ */
+function SvgSketchGrid() {
+  const svgGridRef = useSvgDraw({ staggerMs: 80 });
+
+  return (
+    <div ref={svgGridRef} className="relative z-10 grid w-full max-w-4xl grid-cols-2 sm:grid-cols-4 items-center justify-items-center gap-8 sm:gap-12 md:gap-16 pt-16">
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 136 163" fill="none" className="w-full h-full object-contain">
+          <path d="M58.9 70.4L55.6 108.1M58.9 70.4L47.3 62.7M58.9 70.4L89.3 59.6M55.6 108.1L130.6 78.2L133.6 43.8M55.6 108.1L6.9 73.7L10.1 37.9M133.6 43.8L79.4 15.3M133.6 43.8L89.3 59.6M10.1 37.9L79.4 15.3M10.1 37.9L47.3 62.7M79.4 15.3L76.1 52.7M76.1 52.7L47.3 62.7M76.1 52.7L89.3 59.6" stroke="#0FD6D9" strokeWidth="4" strokeLinecap="round" />
+          <path d="M15 25C25 18 55 5 57 18C49 28 22 55 25 58C35 48 65 25 70 30C58 48 30 75 32 78C45 68 85 35 90 42C75 65 48 95 50 98" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 130 141" fill="none" className="w-full h-full object-contain">
+          <path d="M91 5L29.7 16.5L11 80.9L50.5 129L112.7 115.7M11.7 81.6L68.8 70" stroke="#0FD6D9" strokeWidth="6" strokeLinecap="round" />
+          <path d="M10 30C25 15 45 2 45 10C35 25 20 50 25 52C40 38 65 22 70 28C55 45 35 78 40 82C60 65 95 38 98 45" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 119 101" fill="none" className="w-full h-full object-contain">
+          <path d="M51.7 73.1C81.5 57.7 92.2 51.7 99.7 39.5C107.2 27.3 105.4 17.8 91.5 17.8C77.5 17.8 70.2 17.6 45.5 36.5C20.8 55.4 20.5 58.7 18 70.6C15.5 82.6 27.8 96 43 97.5C58.2 99 94 94.8 107.7 91.5" stroke="#0FD6D9" strokeWidth="5" strokeLinecap="round" />
+          <path d="M5 50C15 38 35 20 40 25C30 40 18 60 22 65C35 50 68 22 72 28C58 48 42 75 48 80C65 65 95 45 98 52" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 124 113" fill="none" className="w-full h-full object-contain">
+          <path d="M48.7 47.2L81.1 41.8C87.6 40.8 92 34.6 90.9 28.1C89.9 21.6 83.7 17.2 77.2 18.3L58.8 21.3C42.8 23.9 31.9 39.1 34.6 55.1C37.2 71.2 52.4 82 68.4 79.4L109.3 72.7" stroke="#0FD6D9" strokeWidth="5" strokeLinecap="round" />
+          <path d="M12 28C22 18 35 10 38 15C28 30 15 50 18 55C32 40 60 22 65 28C52 45 35 70 40 75" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 140 150" fill="none" className="w-full h-full object-contain">
+          <path d="M70 15L120 45V105L70 135L20 105V45L70 15Z" stroke="#0FD6D9" strokeWidth="4" />
+          <path d="M70 15V135M20 45L120 105M120 45L20 105" stroke="#0FD6D9" strokeWidth="3" opacity="0.6" />
+          <path d="M25 50C40 35 85 20 90 30C75 55 45 85 50 90C70 75 110 50 115 60" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 140 140" fill="none" className="w-full h-full object-contain">
+          <path d="M30 30H110V55H60V80H100V105H30V30Z" stroke="#0FD6D9" strokeWidth="5" strokeLinejoin="round" />
+          <path d="M25 35C45 25 95 18 100 25C85 45 50 65 55 70C75 58 105 48 110 55" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 136 123" fill="none" className="w-full h-full object-contain">
+          <path d="M119.5 48.7L69.3 56.6C69.3 56.6 76.2 24.7 91.8 23.4C106.4 22.3 119.5 48.7 119.5 48.7Z" stroke="#0FD6D9" strokeWidth="5" />
+          <path d="M59.1 58.2C58 37.2 90.3 14.2 90.3 14.2C90.3 14.2 66.9 9.2 48.2 19.7C33.5 27.9 22.3 49.6 23.2 63.9C24.2 78.7 41.7 101.4 58.6 106.4" stroke="#0FD6D9" strokeWidth="5" />
+          <path d="M15 50C30 35 70 15 75 22C60 45 35 75 40 80" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
+      </div>
+      <div className="group flex h-28 w-24 sm:h-36 sm:w-32 items-center justify-center transition-transform hover:scale-105">
+        <svg width="120" height="140" viewBox="0 0 141 186" fill="none" className="w-full h-full object-contain">
+          <rect x="45.5" y="34.5" width="72.5" height="19.3" rx="9.6" transform="rotate(8 45.5 34.5)" stroke="#0FD6D9" strokeWidth="5" />
+          <path d="M131 92.5L133.1 77.4C133.8 72.3 130.3 67.6 125.2 66.9C120.1 66.2 115.4 69.7 114.7 74.8L114.3 77.7C113.3 84.4 107.1 89.1 100.4 88.1L57.4 81.9C52 81.2 47.1 84.9 46.3 90.2C45.6 95.5 49.3 100.5 54.6 101.2L108.9 109" stroke="#0FD6D9" strokeWidth="5" />
+          <rect x="32.7" y="124" width="72.5" height="19.8" rx="9.9" transform="rotate(8 32.7 124)" stroke="#0FD6D9" strokeWidth="5" />
+          <path d="M35 30C50 20 90 10 95 18C80 40 45 70 50 75" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+        </svg>
       </div>
     </div>
   );

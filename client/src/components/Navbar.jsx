@@ -11,8 +11,8 @@ const mobileLinks = [
 function Brand({ compact = false, tone = 'text-white' }) {
   return (
     <Link to="/" className={`flex items-center gap-3 ${tone}`} aria-label="Yatin Khandelwal home">
-      <span className="font-mono text-xs tracking-[-0.08em]">YK</span>
-      {!compact && <span className="hidden text-xs font-medium tracking-wide sm:inline">Yatin Khandelwal</span>}
+      <span className="font-mono text-[18px] font-extrabold tracking-[-0.08em]">YK</span>
+      {!compact && <span className="hidden text-[18px] font-extrabold tracking-wide sm:inline">Yatin Khandelwal</span>}
     </Link>
   );
 }
@@ -21,8 +21,10 @@ function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isWorkIndex = location.pathname === '/projects';
-  const desktopTone = isWorkIndex ? 'text-[#080808]' : 'text-white';
-  const desktopRule = isWorkIndex ? 'bg-black/30' : 'bg-white/30';
+  const isResume = location.pathname === '/resume';
+  const isLightPage = isWorkIndex || isResume;
+  const desktopTone = isLightPage ? 'text-[#080808]' : 'text-white';
+  const desktopRule = isLightPage ? 'bg-black/30' : 'bg-white/30';
 
   useEffect(() => {
     const closeOnEscape = (event) => {
@@ -38,8 +40,19 @@ function Navbar() {
         <nav className={`pointer-events-auto mx-auto flex max-w-[1600px] items-center ${desktopTone}`}>
           <Brand tone={desktopTone} />
           <span className={`mx-7 h-px flex-1 md:mx-12 ${desktopRule}`} aria-hidden="true" />
-          <div className="hidden items-center gap-8 text-xs font-medium tracking-wide md:flex">
-            <NavLink to="/projects" className="transition-colors hover:text-[#9df4e6]">Work</NavLink>
+          <div className="hidden items-center gap-10 text-[18px] font-extrabold tracking-wide md:flex">
+            <a
+              href="/#selected-work-section"
+              onClick={(e) => {
+                if (location.pathname === '/') {
+                  e.preventDefault();
+                  document.getElementById('selected-work-section')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="transition-colors hover:text-[#9df4e6]"
+            >
+              Work
+            </a>
             <NavLink to="/resume" className="transition-colors hover:text-[#9df4e6]">Resume</NavLink>
           </div>
           <button
@@ -49,8 +62,8 @@ function Navbar() {
             aria-expanded={mobileMenuOpen}
             className="ml-auto flex h-8 w-8 flex-col items-end justify-center gap-1.5 md:hidden"
           >
-            <span className={`h-px w-6 ${isWorkIndex ? 'bg-[#080808]' : 'bg-white'}`} />
-            <span className={`h-px w-4 ${isWorkIndex ? 'bg-[#080808]' : 'bg-white'}`} />
+            <span className={`h-px w-6 ${isLightPage ? 'bg-[#080808]' : 'bg-white'}`} />
+            <span className={`h-px w-4 ${isLightPage ? 'bg-[#080808]' : 'bg-white'}`} />
           </button>
         </nav>
       </header>
@@ -65,16 +78,27 @@ function Navbar() {
           <button type="button" onClick={() => setMobileMenuOpen(false)} aria-label="Close navigation menu" className="text-xs tracking-widest text-white/70 hover:text-white">CLOSE</button>
         </div>
         <nav className="flex flex-1 flex-col justify-center" aria-label="Mobile navigation">
-          {mobileLinks.map((item, index) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) => `flex items-baseline justify-between border-b border-white/20 py-4 text-[clamp(2.7rem,14vw,5.5rem)] font-bold leading-none tracking-[-.07em] ${isActive ? 'text-[#9df4e6]' : 'text-white'}`}
-            >
-              <span>{item.label}</span><span className="font-mono text-[10px] tracking-normal text-white/40">0{index + 1}</span>
-            </NavLink>
-          ))}
+          {mobileLinks.map((item, index) => {
+            const isWork = item.path === '/projects' || item.path === '/#selected-work-section';
+            const targetPath = isWork ? '/#selected-work-section' : item.path;
+            
+            return (
+              <a
+                key={item.label}
+                href={targetPath}
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  if (isWork && location.pathname === '/') {
+                    e.preventDefault();
+                    document.getElementById('selected-work-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className={`flex items-baseline justify-between border-b border-white/20 py-4 text-[clamp(2.7rem,14vw,5.5rem)] font-bold leading-none tracking-[-.07em] ${location.pathname === item.path ? 'text-[#9df4e6]' : 'text-white'}`}
+              >
+                <span>{item.label}</span><span className="font-mono text-[10px] tracking-normal text-white/40">0{index + 1}</span>
+              </a>
+            );
+          })}
         </nav>
         <p className="font-mono text-[10px] uppercase tracking-[.22em] text-white/45">Fullstack developer · DevOps engineer</p>
       </div>

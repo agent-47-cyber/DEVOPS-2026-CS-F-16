@@ -307,6 +307,210 @@
   transform: translateY(0);
 }
 
+/* Text Reveal (Line-by-line staggered) */
+.text-reveal-container {
+  display: inline-block;
+}
+
+.text-reveal-line {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.is-revealed .text-reveal-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================================
+   Chat Bubble Morph: circle → expanded card on scroll
+   ======================================================== */
+.chat-bubble-morph {
+  width: 50px;
+  height: 50px;
+  border-radius: 50% 50% 50% 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 26, 32, 0.95);
+  backdrop-filter: blur(12px);
+  transition:
+    width 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-bubble-morph.is-expanded {
+  width: min(420px, 82vw);
+  height: auto;
+  border-radius: 16px 16px 16px 0;
+}
+
+.chat-bubble-morph .bubble-inner {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.45s, transform 0.5s ease 0.45s;
+  padding: 1.25rem;
+}
+
+.chat-bubble-morph.is-expanded .bubble-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================================
+   Cursor Glow Floats: unique keyframes per cursor
+   ======================================================== */
+@keyframes floatCursor1 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(8px, -10px); }
+  50% { transform: translate(-4px, -16px); }
+  75% { transform: translate(6px, -6px); }
+}
+
+@keyframes floatCursor2 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(-10px, -8px); }
+  66% { transform: translate(6px, -14px); }
+}
+
+@keyframes floatCursor3 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(12px, -6px); }
+  50% { transform: translate(-6px, -12px); }
+  75% { transform: translate(4px, -18px); }
+}
+
+@keyframes floatCursor4 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-8px, 10px); }
+}
+
+@keyframes floatCursor5 {
+  0%, 100% { transform: translate(0, 0); }
+  30% { transform: translate(10px, 6px); }
+  70% { transform: translate(-6px, -8px); }
+}
+
+.cursor-float-1 { animation: floatCursor1 8s ease-in-out infinite; will-change: transform; }
+.cursor-float-2 { animation: floatCursor2 7s ease-in-out infinite; will-change: transform; }
+.cursor-float-3 { animation: floatCursor3 9s ease-in-out infinite; will-change: transform; }
+.cursor-float-4 { animation: floatCursor4 6s ease-in-out infinite; will-change: transform; }
+.cursor-float-5 { animation: floatCursor5 7.5s ease-in-out infinite; will-change: transform; }
+
+/* ========================================================
+   Hero Per-Line Stagger Entrance
+   ======================================================== */
+.hero-line {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.is-revealed .hero-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-line-1 { transition-delay: 0ms; }
+.hero-line-2 { transition-delay: 150ms; }
+.hero-line-3 { transition-delay: 300ms; }
+
+/* ========================================================
+   Code Snippet Stagger: independent opacity reveals
+   ======================================================== */
+.code-snippet-reveal {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+.code-snippet-reveal.is-visible {
+  opacity: var(--snippet-opacity, 0.65);
+}
+
+/* ========================================================
+   Wireframe Handle Animate-In
+   ======================================================== */
+.wireframe-handle-anim {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.wireframe-handle-anim.is-revealed {
+  opacity: 1;
+}
+
+/* ========================================================
+   Wireframe Peripheral Shape Fade-In
+   ======================================================== */
+.wireframe-shape-anim {
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wireframe-shape-anim.is-revealed {
+  opacity: var(--shape-opacity, 0.4);
+}
+
+/* ========================================================
+   Scroll-to-Top Button
+   ======================================================== */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  color: #0fd6d9;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.scroll-top-btn.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(15, 214, 217, 0.4);
+}
+
+.scroll-top-btn:hover svg {
+  transform: translateY(-2px);
+}
+
+.scroll-top-btn svg {
+  transition: transform 0.2s ease;
+}
+
+/* ========================================================
+   Resume Light Theme Override
+   ======================================================== */
+.resume-light {
+  background-color: #f5f5f5;
+  color: #111;
+}
+
+.resume-light h1,
+.resume-light h2,
+.resume-light h3 {
+  color: #000;
+}
+
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -325,9 +529,25 @@
   .stagger-item,
   .page-enter-hero,
   .page-enter-sub,
-  .page-enter-hint {
+  .page-enter-hint,
+  .hero-line,
+  .chat-bubble-morph,
+  .code-snippet-reveal,
+  .wireframe-handle-anim,
+  .wireframe-shape-anim {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
+  }
+
+  .chat-bubble-morph {
+    width: auto !important;
+    height: auto !important;
+    border-radius: 16px 16px 16px 0 !important;
+  }
+
+  .chat-bubble-morph .bubble-inner {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
