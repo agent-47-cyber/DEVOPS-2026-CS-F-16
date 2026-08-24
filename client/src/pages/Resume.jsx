@@ -75,7 +75,7 @@ function Resume() {
               github.com/agent-47-cyber
             </a>
             <p className="max-w-3xl text-base md:text-lg font-medium leading-snug text-black/80 pt-2">
-              Currently pursuing B.Tech in Computer Science &amp; Engineering at Rajasthan Technical University (RTU),
+              Currently pursuing B.Tech in Computer Science &amp; Engineering at SKIT Jaipur,
               I&apos;m a fullstack developer and DevOps engineer with a passion for designing, architecting,
               and continually expanding my technical skills to create meaningful, high-performance systems.
             </p>
