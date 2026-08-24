@@ -10,6 +10,16 @@ dotenv.config();
 
 const SAMPLE_PROJECTS = [
   {
+    title: 'DevScope AI',
+    description: 'An AI-powered developer intelligence platform providing real-time code analysis, intelligent architecture inspection, automated workflow insights, and interactive developer tooling.',
+    techStack: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'Node.js', 'REST APIs', 'AI Integration', 'Vercel'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://devscopeai-nine.vercel.app/',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    featured: true,
+    order: 1
+  },
+  {
     title: 'Fullstack Portfolio & DevOps Platform',
     description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
     techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'Docker', 'Kubernetes', 'Jenkins', 'Prometheus'],
@@ -17,7 +27,7 @@ const SAMPLE_PROJECTS = [
     liveUrl: 'http://localhost:5173',
     imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
     featured: true,
-    order: 1
+    order: 2
   },
   {
     title: 'Kubernetes Microservices Mesh',
@@ -27,7 +37,7 @@ const SAMPLE_PROJECTS = [
     liveUrl: 'https://k8s-demo.example.com',
     imageUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&auto=format&fit=crop&q=80',
     featured: true,
-    order: 2
+    order: 3
   },
   {
     title: 'Prometheus & Grafana Telemetry Hub',
@@ -36,16 +46,6 @@ const SAMPLE_PROJECTS = [
     repoUrl: 'https://github.com/agent-47-cyber/prometheus-telemetry',
     liveUrl: 'https://grafana-demo.example.com',
     imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80',
-    featured: false,
-    order: 3
-  },
-  {
-    title: 'Declarative CI/CD Jenkins Pipeline',
-    description: 'Multi-stage automated pipeline orchestrating source checkout, dependency caching, lint verification, production Vite build, and automated test execution with feedback notifications.',
-    techStack: ['Jenkins', 'Git', 'Bash', 'Docker'],
-    repoUrl: 'https://github.com/agent-47-cyber/jenkins-pipeline',
-    liveUrl: 'https://jenkins-demo.example.com',
-    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop&q=80',
     featured: false,
     order: 4
   }

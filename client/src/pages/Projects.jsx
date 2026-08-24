@@ -6,19 +6,58 @@ import { useApi } from '../hooks/useApi.js';
 
 function ProjectEntry({ project, index }) {
   return (
-    <Link to={`/projects/${project._id || project.id}`} className={`editorial-work block border-t border-black/20 pt-4 ${index % 2 ? 'md:ml-[12%]' : 'md:mr-[12%]'}`}>
-      <div className="grid gap-5 md:grid-cols-[.9fr_1.1fr] md:items-end">
-        <div className="order-2 md:order-1 md:pb-3">
-          <p className="font-mono text-[10px] uppercase tracking-[.2em] text-black/45">Project {String(index + 1).padStart(2, '0')} — {project.techStack?.slice(0, 2).join(' / ') || 'Case study'}</p>
-          <h2 className="mt-3 text-[clamp(2rem,4vw,4.5rem)] font-bold leading-[.9] tracking-[-.07em]">{project.title}</h2>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-black/65">{project.description}</p>
-          <span className="mt-5 inline-block border-b border-black pb-1 text-xs font-semibold">Read project ↗</span>
+    <div className={`editorial-work block border-t border-black/20 pt-8 ${index % 2 ? 'md:ml-[8%]' : 'md:mr-[8%]'}`}>
+      <div className="grid gap-6 md:grid-cols-[.9fr_1.1fr] md:items-end">
+        <div className="order-2 md:order-1 md:pb-3 space-y-3">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/50">
+            Project {String(index + 1).padStart(2, '0')} — {project.techStack?.slice(0, 3).join(' · ') || 'Case study'}
+          </p>
+          <h2 className="text-[clamp(2rem,4vw,4.5rem)] font-bold leading-[0.9] tracking-[-0.06em] text-black">
+            {project.title}
+          </h2>
+          <p className="max-w-md text-sm leading-relaxed text-black/70">
+            {project.description}
+          </p>
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 border-b-2 border-[#078f98] pb-0.5 text-xs font-mono font-bold text-[#078f98] hover:text-black hover:border-black transition-colors"
+              >
+                <span>Visit Live</span>
+                <span>↗</span>
+              </a>
+            )}
+            <Link
+              to={`/projects/${project._id || project.id}`}
+              className="inline-flex items-center gap-1 border-b border-black pb-0.5 text-xs font-mono font-semibold text-black/80 hover:text-black hover:border-black transition-colors"
+            >
+              <span>Read Case Study</span>
+              <span>&rarr;</span>
+            </Link>
+          </div>
         </div>
-        <div className="work-image order-1 aspect-[4/3] overflow-hidden md:order-2">
-          {project.imageUrl && <img src={project.imageUrl} alt={project.title} loading="lazy" className="h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+        <div className="work-image order-1 aspect-[4/3] overflow-hidden rounded-xl bg-gray-100 shadow-md md:order-2">
+          <Link to={`/projects/${project._id || project.id}`} className="block h-full w-full group">
+            {project.imageUrl ? (
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(event) => { event.currentTarget.style.display = 'none'; }}
+              />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-500 font-mono text-xs p-4 text-center">
+                Interactive Preview
+              </div>
+            )}
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
