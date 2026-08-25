@@ -47,11 +47,11 @@ function Resume() {
       link: 'https://devscopeai-nine.vercel.app/',
     },
     {
-      title: 'Fullstack Portfolio',
-      category: 'Capstone Architecture',
-      description: 'Fullstack personal portfolio with content management REST API, automated Jenkins CI/CD pipeline, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
-      stack: ['React 19', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
-      link: 'https://github.com/agent-47-cyber/collge_portfolio',
+      title: 'My Portfolio Station',
+      category: 'Interactive 3D Experience',
+      description: 'An interactive 3D futuristic observation station portfolio floating in deep space. Features immersive spatial audio, interactive controls, and 3D web environments.',
+      stack: ['Three.js', 'WebGL', 'React', 'Cloudflare Workers', 'Tailwind CSS'],
+      link: 'https://yatin-portfolio.khandelwalyatin2.workers.dev/',
     },
   ];
 

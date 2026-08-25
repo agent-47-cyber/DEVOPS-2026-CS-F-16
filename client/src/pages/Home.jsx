@@ -18,13 +18,13 @@ const DEFAULT_FEATURED_PROJECTS = [
     order: 1
   },
   {
-    _id: 'portfolio-capstone-02',
-    title: 'Fullstack Portfolio',
-    description: 'A modern, fullstack personal portfolio with an integrated content management admin system, built as a DevOps-methodology capstone project for B.Tech (RTU). Features automated Jenkins CI/CD, multi-stage Docker containerization, and Kubernetes cluster orchestration.',
-    techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Docker', 'Kubernetes', 'Jenkins'],
-    repoUrl: 'https://github.com/agent-47-cyber/collge_portfolio',
-    liveUrl: 'http://localhost:5173',
-    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+    _id: 'orbit-portfolio-station-02',
+    title: 'My Portfolio Station',
+    description: 'An interactive 3D futuristic observation station portfolio floating in deep space. Features immersive spatial audio, interactive controls, and 3D web environments.',
+    techStack: ['Three.js', 'WebGL', 'React', 'Cloudflare Workers', 'Tailwind CSS'],
+    repoUrl: 'https://github.com/agent-47-cyber',
+    liveUrl: 'https://yatin-portfolio.khandelwalyatin2.workers.dev/',
+    imageUrl: '/orbit-station.jpg',
     featured: true,
     order: 2
   }
@@ -549,7 +549,7 @@ function ProjectCard({ project, index, isSelected }) {
         <span className={`text-[11px] font-medium tracking-wide transition-colors duration-150 ${isSelected ? 'text-[#00a3ff]' : 'text-gray-400'}`}>
           Project {index + 1}
         </span>
-        {project.liveUrl && index !== 1 && (
+        {project.liveUrl && (
           <a
             href={project.liveUrl}
             target="_blank"
