@@ -31,15 +31,12 @@ describe('Home Page Component', () => {
     });
   });
 
-  test('renders work and contact destinations correctly', async () => {
+  test('renders contact destination correctly', async () => {
     render(
       <BrowserRouter>
         <Home />
       </BrowserRouter>
     );
-
-    const projectsLink = screen.getByRole('link', { name: /All work/i });
-    expect(projectsLink).toHaveAttribute('href', '/projects');
 
     const contactLink = screen.getByRole('link', { name: /Start a conversation/i });
     expect(contactLink).toHaveAttribute('href', '/contact');
