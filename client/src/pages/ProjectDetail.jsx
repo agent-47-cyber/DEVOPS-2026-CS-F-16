@@ -57,7 +57,18 @@ function ProjectDetail() {
   const project = remoteProject || fallbackProject;
 
   if (loading && !project) return <div className="flex min-h-screen items-center justify-center"><div className="h-2 w-48 animate-pulse bg-white/30" /></div>;
-  if (!project) return <div className="flex min-h-screen items-center justify-center px-5 text-center"><div><p className="font-mono text-sm text-red-300">Unable to load this project.</p><Link to="/projects" className="mt-5 inline-block border-b border-white pb-1 text-sm">Back to work</Link></div></div>;
+  if (!project) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-5 text-center">
+        <div>
+          <p className="font-mono text-sm text-red-300">
+            {error ? `Unable to load project: ${error}` : 'Unable to load this project.'}
+          </p>
+          <Link to="/projects" className="mt-5 inline-block border-b border-white pb-1 text-sm">Back to work</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-28">

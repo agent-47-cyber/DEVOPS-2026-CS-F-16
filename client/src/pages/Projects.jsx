@@ -122,6 +122,18 @@ function Projects() {
         {tags.length > 1 && <Reveal className="mt-12 border-y border-black/20 py-4"><div className="flex flex-wrap gap-x-5 gap-y-2">{tags.map((tag) => <button key={tag} type="button" onClick={() => setSelectedTag(tag)} className={`text-xs ${selectedTag === tag ? 'font-bold text-black underline' : 'text-black/50 hover:text-black'}`}>{tag}</button>)}</div></Reveal>}
       </div></section>
       <section className="px-5 pb-28 md:px-10"><div className="mx-auto max-w-[1400px] space-y-14 md:space-y-24">
+        {error && (
+          <div className="rounded-lg border border-black/15 bg-black/[0.03] p-4 font-mono text-xs text-black/70">
+            <span>Unable to sync latest projects from server ({error}). Showing cached portfolio items.</span>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="ml-3 font-bold underline hover:text-[#078f98]"
+            >
+              Retry
+            </button>
+          </div>
+        )}
         {loading && !projects.length && [1, 2, 3].map((item) => <div key={item} className="h-80 animate-pulse border-t border-black/20 bg-black/5" />)}
         {visibleProjects.length === 0 && <p className="py-20 font-mono text-sm text-black/55">No projects match this selection.</p>}
         {visibleProjects.map((project, index) => <Reveal key={project._id || project.id}><ProjectEntry project={project} index={index} /></Reveal>)}

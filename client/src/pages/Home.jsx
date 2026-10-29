@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal.jsx';
 import { useSvgDraw } from '../hooks/useSvgDraw.js';
@@ -31,7 +31,7 @@ const DEFAULT_FEATURED_PROJECTS = [
 ];
 
 function Home() {
-  const { data: remoteProjects, loading, error } = useApi(
+  const { data: remoteProjects, loading } = useApi(
     () => getProjects({ featured: true }),
     []
   );
