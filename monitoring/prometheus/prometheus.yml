@@ -1,0 +1,24 @@
+# Prometheus Configuration for Portfolio DevOps Project
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - 'alert_rules.yml'
+
+scrape_configs:
+  # Scrape target: Node.js Express REST API server
+  - job_name: 'portfolio-server'
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['server:5000']
+        labels:
+          app: 'portfolio-backend'
+          environment: 'production'
+
+  # Scrape target: Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+

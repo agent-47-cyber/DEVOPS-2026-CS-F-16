@@ -1,0 +1,25 @@
+groups:
+  - name: portfolio_alert_rules
+    rules:
+      # Alert when HTTP 5xx error rate exceeds 5% over a 2-minute window
+      - alert: HighHttpErrorRate
+        expr: (sum(rate(http_requests_total{status_code=~"5.."}[2m])) / sum(rate(http_requests_total[2m]))) > 0.05
+        for: 1m
+        labels:
+          severity: warning
+          component: backend
+        annotations:
+          summary: "High HTTP 5xx Error Rate detected"
+          description: "Over 5% of HTTP requests to the portfolio backend returned 5xx errors in the last 2 minutes."
+
+      # Alert when backend service becomes unreachable
+      - alert: BackendServerDown
+        expr: up{job="portfolio-server"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: backend
+        annotations:
+          summary: "Portfolio API Backend is down"
+          description: "Prometheus has been unable to scrape portfolio-server:5000/metrics for more than 1 minute."
+

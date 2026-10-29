@@ -47,9 +47,58 @@ services:
     networks:
       - portfolio-network
 
+  # 4. Prometheus Monitoring Service (Metrics Collection)
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: portfolio-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - server
+    networks:
+      - portfolio-network
+
+  # 5. Grafana Visualization & Operational Dashboard
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: portfolio-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/portfolio_dashboard.json
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - portfolio-network
+
 volumes:
   mongo-data:
     name: portfolio-mongo-data
+  prometheus-data:
+    name: portfolio-prometheus-data
+  grafana-data:
+    name: portfolio-grafana-data
 
 networks:
   portfolio-network:

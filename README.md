@@ -150,7 +150,7 @@ The project includes a declarative Jenkins Continuous Integration pipeline defin
 ### Pipeline Stages
 
 ```text
-Checkout ──▶ Install Dependencies ──▶ Lint (ESLint) ──▶ Build Client ──▶ Server Syntax Check ──▶ Continuous Feedback
+Checkout ──▶ Install Dependencies ──▶ Lint (ESLint) ──▶ Build Client ──▶ Server Syntax Check ──▶ Automated Tests ──▶ Continuous Feedback
 ```
 
 1. **Checkout**: Checks out the latest commit from the Git repository.
@@ -158,7 +158,8 @@ Checkout ──▶ Install Dependencies ──▶ Lint (ESLint) ──▶ Build 
 3. **Lint**: Executes standard ESLint (`npm run lint`) across both React frontend (`client/src/`) and Express backend (`server/`).
 4. **Build Client**: Generates the production Vite build (`npm run build`) in `client/dist/`.
 5. **Server Syntax Check**: Validates Express server syntax and module imports (`npm run check` &rarr; `node --check server.js`) without hanging or requiring a live database.
-6. **Continuous Feedback**: Reports pipeline status with explicit success/failure post-stage handlers.
+6. **Automated Tests**: Runs Jest and Supertest backend tests along with React Testing Library frontend tests (`npm test`).
+7. **Continuous Feedback**: Reports pipeline status with explicit success/failure post-stage handlers.
 
 ### Setting Up the Jenkins Pipeline Job
 
@@ -173,7 +174,72 @@ Checkout ──▶ Install Dependencies ──▶ Lint (ESLint) ──▶ Build 
    - Set **Script Path** to `Jenkinsfile`.
    - Click **Save** and trigger **Build Now**.
 
-> *Note: Automated unit and integration testing (Jest, Supertest, React Testing Library) will be integrated into the Jenkins CI pipeline in Phase 10.*
+---
+
+## Kubernetes Orchestration (DevOps Module 6)
+
+The project includes production-ready, declarative Kubernetes manifests in [`k8s/`](k8s/):
+
+| Manifest File | Components Deployed | Description |
+|---|---|---|
+| `k8s/secret.yaml` | `Secret` | Database connection strings, JWT secret, and admin credentials. |
+| `k8s/mongo.yaml` | `PersistentVolumeClaim`, `Deployment`, `Service` (ClusterIP: 27017) | MongoDB 7.0 database engine with persistent disk storage. |
+| `k8s/server.yaml` | `Deployment`, `Service` (ClusterIP: 5000) | Express.js REST API with liveness & readiness probes on `/api/health`. |
+| `k8s/client.yaml` | `Deployment`, `Service` (NodePort: 30080) | React (Vite) production frontend. |
+| `k8s/prometheus.yaml` | `ConfigMap`, `Deployment`, `Service` (NodePort: 30090) | Prometheus TSDB configured to scrape `/metrics` and evaluate alert rules. |
+| `k8s/grafana.yaml` | `ConfigMap`, `Deployment`, `Service` (NodePort: 30030) | Grafana 11 with auto-provisioned Prometheus datasource & preloaded dashboard. |
+
+### Deploying to Kubernetes
+
+```bash
+# Apply all manifests to your active Kubernetes cluster
+kubectl apply -f k8s/
+
+# Verify status of all pods and services
+kubectl get pods
+kubectl get services
+```
+
+### Accessing Kubernetes Services
+
+- **Frontend Application**: `http://localhost:30080` (or `kubectl port-forward svc/client 5173:5173`)
+- **Backend API & Health**: `http://localhost:5000` (via `kubectl port-forward svc/server 5000:5000`)
+- **Prometheus UI**: `http://localhost:30090` (or `kubectl port-forward svc/prometheus 9090:9090`)
+- **Grafana Dashboard**: `http://localhost:30030` (or `kubectl port-forward svc/grafana 3000:3000`)
+
+---
+
+## Monitoring: Prometheus & Grafana Dashboard (DevOps Module 6)
+
+### 1. Prometheus Metrics Collection (`prom-client`)
+The Express backend exposes real-time telemetry at `GET /metrics` and `GET /api/metrics`:
+- **Counter (`http_requests_total`)**: Total HTTP requests categorized by `method`, `route`, and `status_code`.
+- **Histogram (`http_request_duration_seconds`)**: Latency percentiles across response time buckets.
+- **Gauge (`http_active_requests`)**: Instantaneous in-flight HTTP requests.
+- **Node.js System Telemetry**: Memory heap (`nodejs_heap_size_used_bytes`), CPU utilization, and process uptime.
+
+### 2. Pre-Configured Grafana Dashboard
+A comprehensive operations dashboard is automatically loaded into Grafana:
+1. **Backend Service Status**: Live UP/DOWN indicator (`up{job="portfolio-server"}`).
+2. **Active In-Flight Requests**: Real-time gauge of pending requests.
+3. **Total Requests Handled**: Lifetime query counter.
+4. **Server Process Uptime**: Human-readable uptime display.
+5. **HTTP Request Rate (RPS)**: Requests per second segmented by endpoint route.
+6. **HTTP Latency Percentiles**: 95th percentile (p95) and median (p50) latency graphs.
+7. **HTTP Status Codes**: Breakdown of 2xx, 4xx, and 5xx return codes.
+8. **HTTP 5xx Error Rate (%)**: Percentage of failing requests with warning threshold lines.
+9. **Node.js Memory Utilization**: Heap used, heap total, and external memory consumption over time.
+10. **Node.js CPU Utilization**: Dynamic process CPU usage percentage graph.
+
+### 3. Running with Docker Compose (Local Monitoring)
+```bash
+# Build and start all 5 containers (client, server, mongo, prometheus, grafana)
+docker compose up --build -d
+
+# Open Grafana in your browser:
+# URL: http://localhost:3000
+# User: admin / Pass: admin
+```
 
 
 
