@@ -8,6 +8,7 @@ import projectRoutes from './routes/projectRoutes.js';
 import skillRoutes from './routes/skillRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
+import { metricsMiddleware, metricsHandler } from './middleware/metrics.js';
 
 dotenv.config();
 
@@ -16,11 +17,16 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(metricsMiddleware);
 
 // Root route (basic API status)
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Portfolio API Server Running' });
 });
+
+// Prometheus metrics scrape endpoint
+app.get('/metrics', metricsHandler);
+app.get('/api/metrics', metricsHandler);
 
 // API routes
 app.use('/api/health', healthRoutes);
