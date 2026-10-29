@@ -21,16 +21,24 @@ DEPARTMENT_NAME = "Department of Computer Science & Engineering"
 
 def get_repo_info():
     """Extracts the repository name and current branch."""
-    repo_name = "Project-Repository"
+    repo_name = "DEVOPS-2026-CS-F-16"
     branch_name = "main"
 
     try:
-        root_path = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], encoding='utf-8').strip()
-        repo_name = os.path.basename(root_path)
-    except Exception:
-        try:
+        if os.path.exists("weekly_reports"):
+            for f in os.listdir("weekly_reports"):
+                if "_Weekly_Progress_Report_" in f:
+                    repo_name = f.split("_Weekly_Progress_Report_")[0]
+                    break
+        elif os.environ.get("GITHUB_REPOSITORY"):
+            repo_name = os.environ["GITHUB_REPOSITORY"].split('/')[-1]
+        else:
             remote_url = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url'], encoding='utf-8').strip()
             repo_name = remote_url.rstrip('/').split('/')[-1].replace('.git', '')
+    except Exception:
+        try:
+            root_path = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], encoding='utf-8').strip()
+            repo_name = os.path.basename(root_path)
         except Exception:
             repo_name = os.path.basename(os.getcwd())
 
@@ -176,8 +184,11 @@ def generate_pdf(interval="weekly"):
         report_title = "Final Project Evaluation Report"
         doc_name = f"{repo_name}_Final_Report_{date_stamp}.pdf"
 
+    target_dir = "weekly_reports" if os.path.isdir("weekly_reports") else "."
+    output_path = os.path.join(target_dir, doc_name)
+
     doc = SimpleDocTemplate(
-        doc_name,
+        output_path,
         pagesize=letter,
         rightMargin=36,
         leftMargin=36,
@@ -315,7 +326,7 @@ def generate_pdf(interval="weekly"):
             story.append(KeepTogether(student_section))
 
     doc.build(story)
-    print(f"\n[SUCCESS] Generated: {doc_name}")
+    print(f"\n[SUCCESS] Generated: {output_path}")
     print(f" -> Found {len(students)} student(s) and {total_commits} total commits.")
 
 if __name__ == "__main__":
